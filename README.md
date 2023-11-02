@@ -3,27 +3,10 @@
 
 TinyColor is a small, fast library for color manipulation and conversion in Unity. It allows many forms of input, while providing color conversions and other color utility functions. It has no dependencies.
 
-A port of javascript [tinycolor2](https://github.com/bgrins/TinyColor) by [Brian Grinstead](https://github.com/bgrins)
+A port of javascript [tinycolor2](https://github.com/bgrins/TinyColor) by [Brian Grinstead](https://github.com/bgrins)  
 More specifically a TypeScript port of it [tinycolor](https://github.com/scttcper/tinycolor) by [Scott Cooper](https://github.com/scttcper)
 
 __DEMO__: (todo: link to demo dir)
-
-### Changes from tinycolor2
-
-* reformatted into TypeScript / es2015 and requires node >= 8
-  * tree shakeable "module" export and no package `sideEffects`
-* `tinycolor` is now exported as a class called `TinyColor`
-* default export removed, use `import { TinyColor } from '@ctrl/tinycolor'`
-* new `random`, an implementation of [randomColor](https://github.com/davidmerfield/randomColor/) by David Merfield that returns a TinyColor object
-* several functions moved out of the tinycolor class and are no longer `TinyColor.<function>`
-  * `readability`, `fromRatio` moved out
-  * `random` moved out and renamed to `legacyRandom`
-  * `toFilter` has been moved out and renamed to `toMsFilter`
-* `mix`, `equals` use the current TinyColor object as the first parameter
-* added polyad colors tinycolor PR [126](https://github.com/bgrins/TinyColor/pull/126)
-* color wheel values (360) are allowed to over or under-spin and still return valid colors tinycolor PR [108](https://github.com/bgrins/TinyColor/pull/108)
-* added `tint()` and `shade()` tinycolor PR [159](https://github.com/bgrins/TinyColor/pull/159)
-* `isValid`, `format` are now propertys instead of a function
 
 ## Install
 
