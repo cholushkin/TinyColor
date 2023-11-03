@@ -1,7 +1,26 @@
+using System.Collections.Generic;
+using System.Reflection;
+
 namespace TinyColor
 {
     public static class Color
     {
+        static public Dictionary<string, UnityEngine.Color> Colors;
+
+        static Color()
+        {
+            Colors = new Dictionary<string, UnityEngine.Color>();
+            var colorProperties = typeof(Color).GetProperties(BindingFlags.Public | BindingFlags.Static);
+            foreach (var property in colorProperties)
+            {
+                if (property.PropertyType != typeof(UnityEngine.Color))
+                    continue;
+
+                UnityEngine.Color color = (UnityEngine.Color)property.GetValue(null, null);
+                Colors.Add(property.Name.ToLower(), color);
+            }
+        }
+
         public static UnityEngine.Color AliceBlue { get; } = new UnityEngine.Color(240 / 255.0f, 248 / 255.0f, 255 / 255.0f);
         public static UnityEngine.Color AntiqueWhite { get; } = new UnityEngine.Color(250 / 255.0f, 235 / 255.0f, 215 / 255.0f);
         public static UnityEngine.Color Aqua { get; } = new UnityEngine.Color(0 / 255.0f, 255 / 255.0f, 255 / 255.0f);
