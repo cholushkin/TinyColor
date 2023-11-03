@@ -1,0 +1,22 @@
+{
+  "name": "com.egg.tinycolor",
+  "version": "1.0.0",
+  "displayName": "TinyColor",
+  "description": "TinyColor is a small, fast library for color manipulation and conversion.",
+  "unity": "2019.1",
+  "unityRelease": "0b5",
+  "documentationUrl": "https://github.com/cholushkin/TinyColor",
+  "changelogUrl": "https://example.com/changelog.html",
+  "licensesUrl": "https://github.com/cholushkin/TinyColor/blob/main/LICENSE",
+ "keywords": [
+    "color",
+    "palette",
+    "manipulation",
+    "tiny"
+  ],
+  "author": {
+    "name": "Cholushkin Maxim",
+    "email": "cholushkin@gmail.com",
+    "url": "https://sites.google.com/view/cholushkinmaximcard/home"
+  }
+}
