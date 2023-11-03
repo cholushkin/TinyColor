@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using Color = TinyColor.Color;
 
-public class TinyColorTests
+public class TinyColorConvertionsTest
 {
     [Test]
     void TestColornames()
