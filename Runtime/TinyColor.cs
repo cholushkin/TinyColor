@@ -21,7 +21,7 @@ namespace TinyColor
 
             public override string ToString()
             {
-                return $"RGB({R} {G} {B})";
+                return $"{R} {G} {B}";
             }
         }
 
@@ -38,7 +38,7 @@ namespace TinyColor
 
             public override string ToString()
             {
-                return $"RGBA({R} {G} {B} {A})";
+                return $"{R} {G} {B} {A}";
             }
         }
 
@@ -59,7 +59,7 @@ namespace TinyColor
 
             public override string ToString()
             {
-                return $"RGBA256({R} {G} {B} {A})";
+                return $"{R} {G} {B} {A}";
             }
         }
 
@@ -78,7 +78,7 @@ namespace TinyColor
 
             public override string ToString()
             {
-                return $"HSL({H} {S} {L})";
+                return $"{H} {S} {L}";
             }
         }
 
@@ -95,7 +95,7 @@ namespace TinyColor
 
             public override string ToString()
             {
-                return $"HSLA({H} {S} {L} {A})";
+                return $"{H} {S} {L} {A}";
             }
         }
 
@@ -113,7 +113,7 @@ namespace TinyColor
 
             public override string ToString()
             {
-                return $"HSV({H} {S} {V})";
+                return $"{H} {S} {V}";
             }
         }
 
@@ -129,7 +129,7 @@ namespace TinyColor
 
             public override string ToString()
             {
-                return $"HSVA({H} {S} {V} {A})";
+                return $"{H} {S} {V} {A}";
             }
         }
         #endregion
@@ -199,21 +199,7 @@ namespace TinyColor
         }
         #endregion
 
-
-
-        public override string ToString()
-        {
-            return $"RGBA({R} {G} {B} {A})";
-        }
-
-
-        public string ToRGBA256String()
-        {
-            var rgba256 = this.ToRGBA256();
-            return $"RGBA({rgba256.R}, {rgba256.G}, {rgba256.B}, {rgba256.A})";
-        }
-
-
+        
         public bool Equals(TinyColor other)
         {
             var a = ToRGBA256();
@@ -322,7 +308,14 @@ namespace TinyColor
         }
 
 
-        #region Convert to different color formats
+        #region Convert to different formats
+        
+        public override string ToString()
+        {
+            return ToRGBA().ToString();
+        }
+
+
         public UnityEngine.Color ToColor()
         {
             return new UnityEngine.Color(R, G, B, A);
@@ -334,20 +327,36 @@ namespace TinyColor
             return ToColor();
         }
 
+
         public RGBA256 ToRGBA256()
         {
             return new RGBA256((byte)Mathf.RoundToInt(R * 255), (byte)Mathf.RoundToInt(G * 255), (byte)Mathf.RoundToInt(B * 255), (byte)Mathf.RoundToInt(A * 255));
         }
 
+
+        public RGB ToRGB()
+        {
+            return new RGB(R, G, B);
+        }
+
+
+        public RGB ToRGBA()
+        {
+            return new RGBA(R, G, B, A);
+        }
+
+ 
         public string ToHex8String()
         {
             return "#" + ColorUtility.ToHtmlStringRGBA(ToColor());
         }
 
+
         public string ToHex6String()
         {
             return "#" + ColorUtility.ToHtmlStringRGB(ToColor());
         }
+
 
         public HSL ToHSL()
         {

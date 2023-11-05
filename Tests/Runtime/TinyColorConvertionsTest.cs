@@ -69,5 +69,25 @@ namespace TinyColor
                 Assert.AreEqual(tiny.ToHex8String(), new TinyColor(tiny.ToHSL()).ToHex8String());
             }
         }
+
+        [Test]
+        public void HSLString()
+        {
+            foreach (var c in _conversions)
+            {
+                TinyColor tiny = TinyColor.ParseFromHex(c.hex6);
+                var input = tiny.ToRGBA256();
+
+                var output = TinyColor.ParseFromHSL(tiny.ToHSL().ToString()).ToRGBA256();
+                var maxDiff = 0;
+
+                // Check Red value difference
+                Assert.IsTrue(Mathf.Abs(input.R - output.R) <= maxDiff);
+                // Check Green value difference
+                Assert.IsTrue(Mathf.Abs(input.G - output.G) <= maxDiff);
+                // Check Blue value difference
+                Assert.IsTrue(Mathf.Abs(input.B - output.B) <= maxDiff);
+            }
+        }
     }
 }
