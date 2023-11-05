@@ -181,7 +181,7 @@ namespace TinyColor
         }
 
         public TinyColor(HSL colorHSL):
-            this(Conversion.HslToRgb(colorHSL.H, colorHSL.S, colorHSL.L))
+            this(Conversion.HSLToRGB(colorHSL.H, colorHSL.S, colorHSL.L))
         {
         }
 
@@ -361,6 +361,12 @@ namespace TinyColor
         public HSL ToHSL()
         {
             return Conversion.RGBToHSL(R, G, B);
+        }
+
+
+        public HSV ToHSV()
+        {
+            return Conversion.RGBToHSV(R, G, B);
         }
         #endregion
 

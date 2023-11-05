@@ -81,12 +81,26 @@ namespace TinyColor
                 var output = TinyColor.ParseFromHSL(tiny.ToHSL().ToString()).ToRGBA256();
                 var maxDiff = 0;
 
-                // Check Red value difference
-                Assert.IsTrue(Mathf.Abs(input.R - output.R) <= maxDiff);
-                // Check Green value difference
-                Assert.IsTrue(Mathf.Abs(input.G - output.G) <= maxDiff);
-                // Check Blue value difference
-                Assert.IsTrue(Mathf.Abs(input.B - output.B) <= maxDiff);
+                Assert.IsTrue(Mathf.Abs(input.R - output.R) <= maxDiff); // Check Red value difference
+                Assert.IsTrue(Mathf.Abs(input.G - output.G) <= maxDiff); // Check Green value difference
+                Assert.IsTrue(Mathf.Abs(input.B - output.B) <= maxDiff); // Check Blue value difference
+            }
+        }
+
+        [Test]
+        public void HSVString()
+        {
+            foreach (var c in _conversions) 
+            {
+                TinyColor tiny = TinyColor.ParseFromHex(c.hex6);
+                var input = tiny.ToRGBA256();
+
+                var output = TinyColor.ParseFromHSV(tiny.ToHSV().ToString()).ToRGBA256();
+                var maxDiff = 0;
+                
+                Assert.IsTrue(Mathf.Abs(input.R - output.R) <= maxDiff); // Check Red value difference
+                Assert.IsTrue(Mathf.Abs(input.G - output.G) <= maxDiff); // Check Green value difference
+                Assert.IsTrue(Mathf.Abs(input.B - output.B) <= maxDiff); // Check Blue value difference
             }
         }
     }

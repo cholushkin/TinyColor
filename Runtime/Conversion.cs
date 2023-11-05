@@ -17,7 +17,7 @@ namespace TinyColor
         }
 
 
-        public static float HueToRgb(float p, float q, float t)
+        public static float HueToRGB(float p, float q, float t)
         {
             if (t < 0) t += 1;
             if (t > 1) t -= 1;
@@ -34,7 +34,7 @@ namespace TinyColor
         // It ranges from 0 (a shade of gray) to 1.0 (full saturation).
         // Lightness(L) : Also represented as a percentage, it determines how much light is emitted or reflected by the color.
         // The range is 0 (black) to 1.0 (white), with 0.5 representing the pure color.
-        public static RGB HslToRgb(float h, float s, float l)
+        public static RGB HSLToRGB(float h, float s, float l)
         {
             h = Mathf.Repeat(h, 360f) / 360f;
             s = Mathf.Clamp01(s);
@@ -50,9 +50,9 @@ namespace TinyColor
             {
                 float q = l < 0.5f ? l * (1f + s) : l + s - l * s;
                 float p = 2f * l - q;
-                r = HueToRgb(p, q, h + 1f / 3f);
-                g = HueToRgb(p, q, h);
-                b = HueToRgb(p, q, h - 1f / 3f);
+                r = HueToRGB(p, q, h + 1f / 3f);
+                g = HueToRGB(p, q, h);
+                b = HueToRGB(p, q, h - 1f / 3f);
             }
 
             return new RGB(r, g, b);
@@ -123,6 +123,45 @@ namespace TinyColor
                 h /= 6f;
             }
             return new HSL(h * 360f, s, l);
+        }
+
+
+        public static HSV RGBToHSV(float r, float g, float b)
+        {
+            r = Mathf.Clamp01(r);
+            g = Mathf.Clamp01(g);
+            b = Mathf.Clamp01(b);
+
+            float max = Mathf.Max(r, Mathf.Max(g, b));
+            float min = Mathf.Min(r, Mathf.Min(g, b));
+            float h = 0;
+            float v = max;
+            float d = max - min;
+            float s = max == 0 ? 0 : d / max;
+
+            if (max == min)
+            {
+                h = 0; // achromatic
+            }
+            else
+            {
+                if (max == r)
+                {
+                    h = (g - b) / d + (g < b ? 6 : 0);
+                }
+                else if (max == g)
+                {
+                    h = (b - r) / d + 2;
+                }
+                else if (max == b)
+                {
+                    h = (r - g) / d + 4;
+                }
+
+                h /= 6;
+            }
+
+            return new HSV(h * 360f, s, v);
         }
     }
 }
