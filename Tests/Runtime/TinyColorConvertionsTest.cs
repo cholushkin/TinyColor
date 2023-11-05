@@ -60,8 +60,9 @@ namespace TinyColor
             }
         }
 
+
         [Test]
-        public void HSLObjectTest()
+        public void HSLObject()
         {
             foreach (var c in _conversions)
             {
@@ -69,6 +70,7 @@ namespace TinyColor
                 Assert.AreEqual(tiny.ToHex8String(), new TinyColor(tiny.ToHSL()).ToHex8String());
             }
         }
+
 
         [Test]
         public void HSLString()
@@ -87,6 +89,18 @@ namespace TinyColor
             }
         }
 
+
+        [Test]
+        public void HSVObject()
+        {
+            foreach (var c in _conversions)
+            {
+                TinyColor tiny = TinyColor.ParseFromHSV( c.hsv );
+                Assert.AreEqual(tiny.ToHex8String(), new TinyColor(tiny.ToHSV()).ToHex8String());
+            }
+        }
+
+
         [Test]
         public void HSVString()
         {
@@ -103,5 +117,17 @@ namespace TinyColor
                 Assert.IsTrue(Mathf.Abs(input.B - output.B) <= maxDiff); // Check Blue value difference
             }
         }
+
+
+        [Test]
+        public void RGBObject()
+        {
+            foreach (var c in _conversions)
+            {
+                TinyColor tiny = TinyColor.ParseFromHex(c.hex6);
+                Assert.AreEqual(tiny.ToHex8String(), new TinyColor ( tiny.ToRGB() ).ToHex8String());
+            }
+        }
+
     }
 }
