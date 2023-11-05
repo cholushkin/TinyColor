@@ -18,6 +18,11 @@ namespace TinyColor
                 G = g;
                 B = b;
             }
+
+            public override string ToString()
+            {
+                return $"RGB({R} {G} {B})";
+            }
         }
 
 
@@ -29,6 +34,11 @@ namespace TinyColor
                 : base(r, g, b)
             {
                 A = a;
+            }
+
+            public override string ToString()
+            {
+                return $"RGBA({R} {G} {B} {A})";
             }
         }
 
@@ -46,6 +56,11 @@ namespace TinyColor
                 B = b;
                 A = a;
             }
+
+            public override string ToString()
+            {
+                return $"RGBA256({R} {G} {B} {A})";
+            }
         }
 
 
@@ -60,6 +75,11 @@ namespace TinyColor
                 S = s;
                 L = l;
             }
+
+            public override string ToString()
+            {
+                return $"HSL({H} {S} {L})";
+            }
         }
 
 
@@ -71,6 +91,11 @@ namespace TinyColor
                 : base(h, s, l)
             {
                 A = a;
+            }
+
+            public override string ToString()
+            {
+                return $"HSLA({H} {S} {L} {A})";
             }
         }
 
@@ -85,6 +110,11 @@ namespace TinyColor
                 S = s;
                 V = v;
             }
+
+            public override string ToString()
+            {
+                return $"HSV({H} {S} {V})";
+            }
         }
 
         public class HSVA : HSV
@@ -95,6 +125,11 @@ namespace TinyColor
                 : base(h, s, v)
             {
                 A = a;
+            }
+
+            public override string ToString()
+            {
+                return $"HSVA({H} {S} {V} {A})";
             }
         }
         #endregion
@@ -302,6 +337,21 @@ namespace TinyColor
         public RGBA256 ToRGBA256()
         {
             return new RGBA256((byte)Mathf.RoundToInt(R * 255), (byte)Mathf.RoundToInt(G * 255), (byte)Mathf.RoundToInt(B * 255), (byte)Mathf.RoundToInt(A * 255));
+        }
+
+        public string ToHex8String()
+        {
+            return "#" + ColorUtility.ToHtmlStringRGBA(ToColor());
+        }
+
+        public string ToHex6String()
+        {
+            return "#" + ColorUtility.ToHtmlStringRGB(ToColor());
+        }
+
+        public HSL ToHSL()
+        {
+            return Conversion.RGBToHSL(R, G, B);
         }
         #endregion
 

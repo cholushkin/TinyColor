@@ -61,7 +61,7 @@ namespace TinyColor
 
         public static RGB HSVToRGB(float h, float s, float v)
         {
-            h = Mathf.Repeat(h, 360f) / 360f *6;
+            h = Mathf.Repeat(h, 360f) / 360f * 6;
             s = Mathf.Clamp01(s);
             v = Mathf.Clamp01(v);
 
@@ -84,5 +84,45 @@ namespace TinyColor
         }
 
 
+        public static HSL RGBToHSL(float r, float g, float b)
+        {
+            r = Mathf.Clamp01(r);
+            g = Mathf.Clamp01(g);
+            b = Mathf.Clamp01(b);
+
+            float max = Mathf.Max(r, g, b);
+            float min = Mathf.Min(r, g, b);
+            float h = 0f;
+            float s = 0f;
+            float l = (max + min) / 2f;
+
+            if (max == min)
+            {
+                s = 0;
+                h = 0; // achromatic
+            }
+            else
+            {
+                float d = max - min;
+                s = l > 0.5f ? d / (2f - max - min) : d / (max + min);
+                switch (max)
+                {
+                    case float _ when max == r:
+                        h = (g - b) / d + (g < b ? 6 : 0);
+                        break;
+                    case float _ when max == g:
+                        h = (b - r) / d + 2;
+                        break;
+                    case float _ when max == b:
+                        h = (r - g) / d + 4;
+                        break;
+                    default:
+                        break;
+                }
+
+                h /= 6f;
+            }
+            return new HSL(h * 360f, s, l);
+        }
     }
 }

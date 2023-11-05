@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using UnityEngine;
 
 namespace TinyColor
 {
@@ -13,13 +14,13 @@ namespace TinyColor
             public string hsv { get; set; }
         }
 
-        private ConversionData[] conversions;
+        private ConversionData[] _conversions;
 
         [SetUp]
         public void Setup()
         {
-            // Initialize the conversions array with data before each test
-            conversions = new ConversionData[]
+            // Initialize the conversions array with test data before each test
+            _conversions = new ConversionData[]
             {
                 new ConversionData { hex6 = "#FFFFFF", rgb = "1.0 1.0 1.0",       hex8 = "#FFFFFFFF", hsl = "0 0.000 1.000",     hsv = "0 0.000 1.000" },
                 new ConversionData { hex6 = "#808080", rgb = "0.5 0.5 0.5",       hex8 = "#808080FF", hsl = "0 0.000 0.500",     hsv = "0 0.000 0.500" },
@@ -44,7 +45,7 @@ namespace TinyColor
         [Test]
         public void ShouldHaveColorEquality()
         {
-            foreach (var c in conversions)
+            foreach (var c in _conversions)
             {
                 Assert.IsTrue(TinyColor.ParseFromHex(c.hex6).Equals(TinyColor.ParseFromRGB(c.rgb)), $"Parsing from HEX6({TinyColor.ParseFromHex(c.hex6)}) VS RGB({TinyColor.ParseFromRGB(c.rgb)})");
                 Assert.IsTrue(TinyColor.ParseFromHex(c.hex8).Equals(TinyColor.ParseFromRGB(c.rgb)), $"Parsing from HEX8({TinyColor.ParseFromHex(c.hex8)}) VS RGB({TinyColor.ParseFromRGB(c.rgb)})");
@@ -56,6 +57,16 @@ namespace TinyColor
                 Assert.IsTrue(TinyColor.ParseFromHex(c.hex6).Equals(TinyColor.ParseFromHSL(c.hsl)), $"Parsing from HEX6({TinyColor.ParseFromHex(c.hex6)}) VS HSL({TinyColor.ParseFromHSL(c.hsl)})");
                 Assert.IsTrue(TinyColor.ParseFromHex(c.hex6).Equals(TinyColor.ParseFromHSV(c.hsv)), $"Parsing from HEX6({TinyColor.ParseFromHex(c.hex6)}) VS HSV({TinyColor.ParseFromHSV(c.hsv)})");
                 Assert.IsTrue(TinyColor.ParseFromHSL(c.hsl).Equals(TinyColor.ParseFromHSV(c.hsv)), $"Parsing from HSL({TinyColor.ParseFromHSL(c.hsl)}) VS HSV({TinyColor.ParseFromHSV(c.hsv)})");
+            }
+        }
+
+        [Test]
+        public void HSLObjectTest()
+        {
+            foreach (var c in _conversions)
+            {
+                TinyColor tiny = TinyColor.ParseFromHex(c.hex6);
+                Assert.AreEqual(tiny.ToHex8String(), new TinyColor(tiny.ToHSL()).ToHex8String());
             }
         }
     }
