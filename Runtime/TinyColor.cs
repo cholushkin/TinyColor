@@ -197,9 +197,17 @@ namespace TinyColor
         public TinyColor(HSVA colorHSVA)
         {
         }
+
+        public TinyColor(TinyColor tinyColor)
+        {
+            R = tinyColor.R;
+            G = tinyColor.G;
+            B = tinyColor.B;
+            A = tinyColor.A;
+        }
         #endregion
 
-        
+
         public bool Equals(TinyColor other)
         {
             var a = ToRGBA256();

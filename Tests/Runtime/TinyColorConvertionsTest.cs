@@ -129,5 +129,25 @@ namespace TinyColor
             }
         }
 
+
+        [Test]
+        public void RgbString()
+        {
+            foreach (var c in _conversions)
+            {
+                TinyColor tiny = TinyColor.ParseFromHex(c.hex6);
+                Assert.AreEqual(tiny.ToHex8String(), TinyColor.ParseFromRGB(tiny.ToRGB().ToString()).ToHex8String());
+            }
+        }
+
+        [Test]
+        public void TestObject()
+        {
+            foreach (var c in _conversions)
+            {
+                TinyColor tiny = TinyColor.ParseFromHex(c.hex6);
+                Assert.AreEqual(tiny.ToHex8String(), new TinyColor(tiny).ToHex8String());
+            }
+        }
     }
 }
