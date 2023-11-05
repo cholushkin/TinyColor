@@ -1,5 +1,7 @@
 
 
+using NUnit.Framework;
+
 namespace TinyColor
 {
     public class TinyColorModificationsTest
@@ -110,7 +112,19 @@ namespace TinyColor
             "1f0000", "1c0000", "1a0000", "170000", "140000", "120000", "0f0000", "0d0000",
             "0a0000", "080000", "050000", "030000", "000000"
         };
-
         #endregion
+
+
+        [Test]
+        public void ConstructByName()
+        {
+            Assert.AreEqual("red", new TinyColor("red").ToName()); // create by name and then internally convert to name again
+            Assert.AreEqual("blue", new TinyColor("blue").ToName()); // create by name and then internally convert to name again
+            Assert.AreEqual("green", new TinyColor("green").ToName()); // create by name and then internally convert to name again
+            
+            Assert.AreEqual("white", new TinyColor("qqqqqqq").ToName()); // create by name and then internally convert to name again
+            Assert.AreEqual("white", new TinyColor("aaaaaaa").ToName()); // create by name and then internally convert to name again
+            Assert.AreEqual("white", new TinyColor(string.Empty).ToName()); // create by name and then internally convert to name again
+        }
     }
 }

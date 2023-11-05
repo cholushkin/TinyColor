@@ -5,11 +5,11 @@ namespace TinyColor
 {
     public static class Color
     {
-        static public Dictionary<string, UnityEngine.Color> Colors;
+        static public Dictionary<string, TinyColor> Colors;
 
         static Color()
         {
-            Colors = new Dictionary<string, UnityEngine.Color>();
+            Colors = new Dictionary<string, TinyColor>();
             var colorProperties = typeof(Color).GetProperties(BindingFlags.Public | BindingFlags.Static);
             foreach (var property in colorProperties)
             {
@@ -17,7 +17,7 @@ namespace TinyColor
                     continue;
 
                 UnityEngine.Color color = (UnityEngine.Color)property.GetValue(null, null);
-                Colors.Add(property.Name.ToLower(), color);
+                Colors.Add(property.Name.ToLower(), new TinyColor(color));
             }
         }
 

@@ -180,31 +180,47 @@ namespace TinyColor
             A = colorRGBA.A;
         }
 
-        public TinyColor(HSL colorHSL):
+        public TinyColor(HSL colorHSL) :
             this(Conversion.HSLToRGB(colorHSL.H, colorHSL.S, colorHSL.L))
         {
         }
 
-        public TinyColor(HSLA colorHSLA)
+        public TinyColor(HSLA colorHSLA) :
+            this(Conversion.HSLToRGB(colorHSLA.H, colorHSLA.S, colorHSLA.L))
         {
+            A = colorHSLA.A;
         }
 
-        public TinyColor(HSV colorHSV):
+        public TinyColor(HSV colorHSV) :
             this(Conversion.HSVToRGB(colorHSV.H, colorHSV.S, colorHSV.V))
         {
         }
 
-        public TinyColor(HSVA colorHSVA)
+        public TinyColor(HSVA colorHSVA) :
+            this(Conversion.HSVToRGB(colorHSVA.H, colorHSVA.S, colorHSVA.V))
         {
+            A = colorHSVA.A;
         }
 
         public TinyColor(TinyColor tinyColor)
         {
+            if (tinyColor == null)
+            {
+                R=G=B=A=A=1;
+                return;
+            }
             R = tinyColor.R;
             G = tinyColor.G;
             B = tinyColor.B;
             A = tinyColor.A;
         }
+
+        public TinyColor(string colorName):
+            this(Color.Colors.GetValueOrDefault(colorName.ToLower()))
+        {
+        }
+
+
         #endregion
 
 
@@ -215,12 +231,6 @@ namespace TinyColor
             return a.R.Equals(b.R) && a.G.Equals(b.G) && a.B.Equals(b.B) && a.A.Equals(b.A);
         }
 
-
-        // Possible string inputs:
-        // "red"
-        // "#ff000000" or "ff000000"
-        // "1.0 0 0"
-        // "1.0, 0, 0, 1"
 
         public static TinyColor ParseFromName(string nameString)
         {
@@ -262,7 +272,7 @@ namespace TinyColor
             foreach (string s in spaceSeparatedFloats.Split(' '))
             {
                 var f = Convert.ToSingle(s);
-                if(clamp01)
+                if (clamp01)
                     result.Add(Mathf.Clamp01(f));
                 else
                     result.Add(f);
@@ -317,10 +327,30 @@ namespace TinyColor
 
 
         #region Convert to different formats
-        
+
         public override string ToString()
         {
             return ToRGBA().ToString();
+        }
+
+
+        public string ToName()
+        {
+            if (Mathf.Approximately(A, 0f))
+                return "transparent";
+
+            if (A < 1.0f)
+                return null;
+
+            var myHex8 = ToHex8String();
+
+            foreach (var kv in Color.Colors)
+            {
+                var hex8 = kv.Value.ToHex8String();
+                if (hex8 == myHex8)
+                    return kv.Key;
+            }
+            return null;
         }
 
 
@@ -353,7 +383,7 @@ namespace TinyColor
             return new RGBA(R, G, B, A);
         }
 
- 
+
         public string ToHex8String()
         {
             return "#" + ColorUtility.ToHtmlStringRGBA(ToColor());
