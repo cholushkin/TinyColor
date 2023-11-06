@@ -1,6 +1,5 @@
-
-
 using NUnit.Framework;
+using UnityEngine;
 
 namespace TinyColor
 {
@@ -125,6 +124,45 @@ namespace TinyColor
             Assert.AreEqual("white", new TinyColor("qqqqqqq").ToName()); // create by name and then internally convert to name again
             Assert.AreEqual("white", new TinyColor("aaaaaaa").ToName()); // create by name and then internally convert to name again
             Assert.AreEqual("white", new TinyColor(string.Empty).ToName()); // create by name and then internally convert to name again
+        }
+
+        [Test]
+        public void ShouldClone()
+        {
+	        // Instantiate the initial color
+	        TinyColor color1 = new TinyColor("red");
+
+	        // Clone the color
+	        TinyColor color2 = new TinyColor("red").Clone() as TinyColor;
+            Assert.IsNotNull(color2);
+
+	        // Set alpha on the cloned color
+	        color2.A = 0.5f;
+
+	        // Assert the string representation of the cloned color
+	        Assert.AreEqual("1 0 0 0.5", color2.ToRGBA().ToString());
+
+	        // Assert the string representation of the original color is unchanged
+	        Assert.AreEqual("red", color1.ToName());
+        }
+
+
+        [Test]
+        public void FromRGB()
+        {
+            
+	        Assert.IsTrue(new TinyColor(new TinyColor.RGB(1,1,1)).ToHex8String() == "#FFFFFFFF");
+	        Assert.IsTrue(new TinyColor(new TinyColor.RGBA(1, 0, 0, 0.5f)).ToRGBA().ToString() == "1 0 0 0.5");
+	        Assert.IsTrue(new TinyColor(new TinyColor.RGBA(1, 0, 0, 1f)).ToRGB().ToString() == "1 0 0");
+	        Assert.IsTrue(new TinyColor(new TinyColor.RGBA(1, 0, 0, 10f)).ToRGB().ToString() == "1 0 0");
+	        Assert.IsTrue(new TinyColor(new TinyColor.RGBA(1, 0, 0, -10f)).ToRGB().ToString() == "1 0 0");
+            Assert.IsTrue(new TinyColor(new TinyColor.RGB(0.1f, 0.1f, 0.1f)).ToHex8String() == "#1A1A1AFF"); 
+            // 0.1 * 255 = 25.5f. If the number ends in .5 so it is halfway between two integers,
+            // one of which is even and the other odd, the even number is returned ( Mathf.RoundToInt docs) 
+            // 26 to hex 1A
+            // note:
+            // This type of rounding is often used to minimize the overall rounding error introduced by rounding multiple numbers.
+            // It tends to spread the rounding error equally in both directions(up and down).
         }
     }
 }

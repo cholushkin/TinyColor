@@ -5,7 +5,7 @@ using UnityEngine.Assertions;
 
 namespace TinyColor
 {
-    public class TinyColor
+    public class TinyColor : ICloneable
     {
         #region Color conversion light data structures
         public class RGB
@@ -224,6 +224,11 @@ namespace TinyColor
         #endregion
 
 
+        public object Clone()
+        {
+	        return MemberwiseClone();
+        }
+
         public bool Equals(TinyColor other)
         {
             var a = ToRGBA256();
@@ -231,6 +236,7 @@ namespace TinyColor
             return a.R.Equals(b.R) && a.G.Equals(b.G) && a.B.Equals(b.B) && a.A.Equals(b.A);
         }
 
+        #region Parse from different string representation
 
         public static TinyColor ParseFromName(string nameString)
         {
@@ -325,6 +331,8 @@ namespace TinyColor
             return default(TinyColor);
         }
 
+        #endregion
+
 
         #region Convert to different formats
 
@@ -407,6 +415,5 @@ namespace TinyColor
             return Conversion.RGBToHSV(R, G, B);
         }
         #endregion
-
     }
 }

@@ -1,5 +1,5 @@
 # tinycolor 
-![TinyColor Logo](Promo/tinycolor-low-resolution-logo-transparent.png)
+![TinyColor Logo](Promo~/tinycolor-low-resolution-logo-transparent.png)
 
 TinyColor is a small, fast library for color manipulation and conversion in Unity. It allows many forms of input, while providing color conversions and other color utility functions. It has no dependencies.
 
@@ -10,9 +10,8 @@ __DEMO__: (todo: link to demo dir)
 
 ## Install
 
-todo: package manager
-todo: unity asset store
-todo: git submodule
+todo: package manager  
+todo: unity asset store  
 
 
 ## Use
