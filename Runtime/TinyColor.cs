@@ -300,22 +300,57 @@ namespace TinyColor
 
         private static List<float> GetFloats(string spaceSeparatedFloats, bool clamp01)
         {
-            Assert.IsFalse(string.IsNullOrEmpty(spaceSeparatedFloats));
-            if (string.IsNullOrEmpty(spaceSeparatedFloats))
-                return null;
-
-            spaceSeparatedFloats = spaceSeparatedFloats.Trim();
-
-            List<float> result = new List<float>(4);
-            foreach (string s in spaceSeparatedFloats.Split(' '))
+            try
             {
-                var f = Convert.ToSingle(s);
-                if (clamp01)
-                    result.Add(Mathf.Clamp01(f));
-                else
-                    result.Add(f);
+                Assert.IsFalse(string.IsNullOrEmpty(spaceSeparatedFloats));
+                if (string.IsNullOrEmpty(spaceSeparatedFloats))
+                    return null;
+
+                spaceSeparatedFloats = spaceSeparatedFloats.Trim();
+
+                List<float> result = new List<float>(4);
+                foreach (string s in spaceSeparatedFloats.Split(' '))
+                {
+                    var f = Convert.ToSingle(s);
+                    if (clamp01)
+                        result.Add(Mathf.Clamp01(f));
+                    else
+                        result.Add(f);
+                }
+                return result;
             }
-            return result;
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
+        private static List<int> GetInts(string spaceSeparatedInts, bool clamp255)
+        {
+            try
+            {
+                Assert.IsFalse(string.IsNullOrEmpty(spaceSeparatedInts));
+                if (string.IsNullOrEmpty(spaceSeparatedInts))
+                    return null;
+
+                spaceSeparatedInts = spaceSeparatedInts.Trim();
+
+                List<int> result = new List<int>(4);
+                foreach (string s in spaceSeparatedInts.Split(' '))
+                {
+                    var f = Convert.ToInt32(s);
+                    if (clamp255)
+                        result.Add(Mathf.Clamp(f, 0, 255));
+                    else
+                        result.Add(f);
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }            
         }
 
 
@@ -325,10 +360,29 @@ namespace TinyColor
                 return default(TinyColor);
             var vals = GetFloats(rgbString, true);
 
-            if (vals.Count == 3)
+            if(vals == null)
+                return default(TinyColor);
+            else if (vals.Count == 3)
                 return new TinyColor(new RGB(vals[0], vals[1], vals[2]));
             else if (vals.Count == 4)
                 return new TinyColor(new RGBA(vals[0], vals[1], vals[2], vals[3]));
+
+            return default(TinyColor);
+        }
+
+
+        public static TinyColor ParseFromRGB256(string rgbString)
+        {
+            if (string.IsNullOrEmpty(rgbString))
+                return default(TinyColor);
+            var vals = GetInts(rgbString, true);
+
+            if (vals == null)
+                return default(TinyColor);
+            else if (vals.Count == 3)
+                return new TinyColor(new RGB256((byte)vals[0], (byte)vals[1], (byte)vals[2]));
+            else if (vals.Count == 4)
+                return new TinyColor(new RGBA256((byte)vals[0], (byte)vals[1], (byte)vals[2], (byte)vals[3]));
 
             return default(TinyColor);
         }
@@ -340,7 +394,9 @@ namespace TinyColor
                 return default(TinyColor);
             var vals = GetFloats(hslString, false);
 
-            if (vals.Count == 3)
+            if (vals == null)
+                return default(TinyColor);
+            else if (vals.Count == 3)
                 return new TinyColor(new HSL(vals[0], vals[1], vals[2]));
             else if (vals.Count == 4)
                 return new TinyColor(new HSLA(vals[0], vals[1], vals[2], vals[3]));
@@ -355,7 +411,9 @@ namespace TinyColor
                 return default(TinyColor);
             var vals = GetFloats(hsvString, false);
 
-            if (vals.Count == 3)
+            if (vals == null)
+                return default(TinyColor);
+            else if (vals.Count == 3)
                 return new TinyColor(new HSV(vals[0], vals[1], vals[2]));
             else if (vals.Count == 4)
                 return new TinyColor(new HSVA(vals[0], vals[1], vals[2], vals[3]));
@@ -457,6 +515,13 @@ namespace TinyColor
         public HSV ToHSV()
         {
             return Conversion.RGBToHSV(R, G, B);
+        }
+
+
+        public HSVA ToHSVA()
+        {
+            var hsv = Conversion.RGBToHSV(R, G, B);
+            return new HSVA(hsv.H, hsv.S, hsv.V, A);
         }
         #endregion
     }

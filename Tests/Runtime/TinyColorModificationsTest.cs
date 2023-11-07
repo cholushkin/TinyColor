@@ -196,7 +196,6 @@ namespace TinyColor
             Assert.IsTrue(new TinyColor(new TinyColor.HSL(251, 1.0f, 0.38f)).ToHSL().ToString() == "251 1 0.38");
             Assert.IsTrue(new TinyColor(new TinyColor.HSLA(251, 1.0f, 0.38f, 0.38f)).ToHSLA().ToString() == "251 1 0.38 0.38");
 
-
             // problematic hsl
             Assert.IsTrue(new TinyColor(new TinyColor.HSL(100, 0.2f, 0.1f)).ToHSL().ToString() == "100 0.2 0.1");
             Assert.IsTrue(new TinyColor(new TinyColor.HSLA(100, 0.2f, 0.1f, 0.38f)).ToHSLA().ToString() == "100 0.2 0.1 0.38");
@@ -209,6 +208,46 @@ namespace TinyColor
         [Test]
         public void ShouldParseRGBString()
         {
+            Assert.IsTrue(TinyColor.ParseFromRGB256("255 0 0").ToHex6String() == "#FF0000");
+            Assert.IsTrue(TinyColor.ParseFromRGB256("255 0 0 128").ToHex8String() == "#FF000080");
+            Assert.IsTrue(TinyColor.ParseFromRGB256("255 0 0 0").ToHex8String() == "#FF000000");
+            Assert.IsTrue(TinyColor.ParseFromRGB256("255 0 0 255").ToHex8String() == "#FF0000FF");
+            Assert.IsTrue(TinyColor.ParseFromRGB256("255 0 0 0").ToHex8String() == "#FF000000");
+        }
+
+        [Test]
+        public void ShouldParseHSVString()
+        {
+            Assert.IsTrue(TinyColor.ParseFromHSV("251.1 0.887 .918").ToHSV().ToString() == "251.1 0.887 0.918");
+            Assert.IsTrue(TinyColor.ParseFromHSV("251.1 0.887 0.918").ToHSV().ToString() == "251.1 0.887 0.918");
+            Assert.IsTrue(TinyColor.ParseFromHSV("251.1 0.887 0.918 0.5").ToHSVA().ToString() == "251.1 0.887 0.918 0.5");
+        }
+
+        [Test]
+        public void ShouldParseInvalidInput()
+        {
+            Assert.IsNull(TinyColor.ParseFromName("not a color"));
+            Assert.IsNull(TinyColor.ParseFromHex("not a color"));
+            Assert.IsNull(TinyColor.ParseFromRGB("not a color"));
+            Assert.IsNull(TinyColor.ParseFromRGB256("not a color"));
+            Assert.IsNull(TinyColor.ParseFromHSL("not a color"));
+            Assert.IsNull(TinyColor.ParseFromHSV("not a color"));
+        }
+
+        [Test]
+        public void ShouldParseNamedColor()
+        {
+            Assert.IsTrue(TinyColor.ParseFromName("aliceblue").ToHex6String()== "#F0F8FF");
+            Assert.IsTrue(TinyColor.ParseFromName("antiquewhite").ToHex6String() == "#FAEBD7");
+            Assert.IsTrue(TinyColor.ParseFromName("aqua").ToHex6String() == "#00FFFF");
+            Assert.IsTrue(TinyColor.ParseFromName("aquamarine").ToHex6String() == "#7FFFD4");
+            Assert.IsTrue(TinyColor.ParseFromName("azure").ToHex6String() == "#F0FFFF");
+            Assert.IsTrue(TinyColor.ParseFromName("beige").ToHex6String() == "#F5F5DC");
+            Assert.IsTrue(TinyColor.ParseFromName("bisque").ToHex6String() == "#FFE4C4");
+
+
+            Assert.IsTrue(TinyColor.ParseFromHex("#F00").ToName() == "red");
+            Assert.IsTrue(TinyColor.ParseFromHex("#FA0A0A").ToName() == null);
         }
     }
 }
