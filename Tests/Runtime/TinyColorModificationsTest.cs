@@ -120,7 +120,7 @@ namespace TinyColor
             Assert.AreEqual("red", new TinyColor("red").ToName()); // create by name and then internally convert to name again
             Assert.AreEqual("blue", new TinyColor("blue").ToName()); // create by name and then internally convert to name again
             Assert.AreEqual("green", new TinyColor("green").ToName()); // create by name and then internally convert to name again
-            
+
             Assert.AreEqual("white", new TinyColor("qqqqqqq").ToName()); // create by name and then internally convert to name again
             Assert.AreEqual("white", new TinyColor("aaaaaaa").ToName()); // create by name and then internally convert to name again
             Assert.AreEqual("white", new TinyColor(string.Empty).ToName()); // create by name and then internally convert to name again
@@ -129,33 +129,33 @@ namespace TinyColor
         [Test]
         public void ShouldClone()
         {
-	        // Instantiate the initial color
-	        TinyColor color1 = new TinyColor("red");
+            // Instantiate the initial color
+            TinyColor color1 = new TinyColor("red");
 
-	        // Clone the color
-	        TinyColor color2 = new TinyColor("red").Clone() as TinyColor;
+            // Clone the color
+            TinyColor color2 = new TinyColor("red").Clone() as TinyColor;
             Assert.IsNotNull(color2);
 
-	        // Set alpha on the cloned color
-	        color2.A = 0.5f;
+            // Set alpha on the cloned color
+            color2.A = 0.5f;
 
-	        // Assert the string representation of the cloned color
-	        Assert.AreEqual("1 0 0 0.5", color2.ToRGBA().ToString());
+            // Assert the string representation of the cloned color
+            Assert.AreEqual("1 0 0 0.5", color2.ToRGBA().ToString());
 
-	        // Assert the string representation of the original color is unchanged
-	        Assert.AreEqual("red", color1.ToName());
+            // Assert the string representation of the original color is unchanged
+            Assert.AreEqual("red", color1.ToName());
         }
 
 
         [Test]
         public void FromRGB()
         {
-	        Assert.IsTrue(new TinyColor(new TinyColor.RGB(1,1,1)).ToHex8String() == "#FFFFFFFF");
-	        Assert.IsTrue(new TinyColor(new TinyColor.RGBA(1, 0, 0, 0.5f)).ToRGBA().ToString() == "1 0 0 0.5");
-	        Assert.IsTrue(new TinyColor(new TinyColor.RGBA(1, 0, 0, 1f)).ToRGB().ToString() == "1 0 0");
-	        Assert.IsTrue(new TinyColor(new TinyColor.RGBA(1, 0, 0, 10f)).ToRGB().ToString() == "1 0 0");
-	        Assert.IsTrue(new TinyColor(new TinyColor.RGBA(1, 0, 0, -10f)).ToRGB().ToString() == "1 0 0");
-            Assert.IsTrue(new TinyColor(new TinyColor.RGB(0.1f, 0.1f, 0.1f)).ToHex8String() == "#1A1A1AFF"); 
+            Assert.IsTrue(new TinyColor(new TinyColor.RGB(1, 1, 1)).ToHex8String() == "#FFFFFFFF");
+            Assert.IsTrue(new TinyColor(new TinyColor.RGBA(1, 0, 0, 0.5f)).ToRGBA().ToString() == "1 0 0 0.5");
+            Assert.IsTrue(new TinyColor(new TinyColor.RGBA(1, 0, 0, 1f)).ToRGB().ToString() == "1 0 0");
+            Assert.IsTrue(new TinyColor(new TinyColor.RGBA(1, 0, 0, 10f)).ToRGB().ToString() == "1 0 0");
+            Assert.IsTrue(new TinyColor(new TinyColor.RGBA(1, 0, 0, -10f)).ToRGB().ToString() == "1 0 0");
+            Assert.IsTrue(new TinyColor(new TinyColor.RGB(0.1f, 0.1f, 0.1f)).ToHex8String() == "#1A1A1AFF");
             // 0.1 * 255 = 25.5f. If the number ends in .5 so it is halfway between two integers,
             // one of which is even and the other odd, the even number is returned ( Mathf.RoundToInt docs) 
             // 26 to hex 1A
@@ -177,10 +177,38 @@ namespace TinyColor
         public void ParseRGB()
         {
             Assert.IsTrue(TinyColor.ParseFromRGB("1 0 0").ToHex6String() == "#FF0000");
-            Assert.IsTrue(new TinyColor(new TinyColor.RGB(1,0,0)).ToHex6String() == "#FF0000");
+            Assert.IsTrue(new TinyColor(new TinyColor.RGB(1, 0, 0)).ToHex6String() == "#FF0000");
             Assert.IsTrue(new TinyColor(new TinyColor.RGBA256(255, 0, 0, 255)).ToHex6String() == "#FF0000");
             Assert.IsTrue(new TinyColor(new TinyColor.RGB256(200, 100, 0)).ToRGB256().ToString() == "200 100 0");
             Assert.IsTrue(new TinyColor(new TinyColor.RGBA256(200, 100, 0, 8)).ToRGBA256().ToString() == "200 100 0 8");
+        }
+
+        [Test]
+        public void ShouldParseHSL()
+        {
+            // to hex
+            Assert.IsTrue(new TinyColor(new TinyColor.HSL(251, 1.0f, 0.38f)).ToHex6String() == "#2400C2");
+
+            // to rgb
+            Assert.IsTrue(new TinyColor(new TinyColor.HSL(251, 1.0f, 0.38f)).ToRGB256().ToString() == "36 0 194");
+
+            // to hsl
+            Assert.IsTrue(new TinyColor(new TinyColor.HSL(251, 1.0f, 0.38f)).ToHSL().ToString() == "251 1 0.38");
+            Assert.IsTrue(new TinyColor(new TinyColor.HSLA(251, 1.0f, 0.38f, 0.38f)).ToHSLA().ToString() == "251 1 0.38 0.38");
+
+
+            // problematic hsl
+            Assert.IsTrue(new TinyColor(new TinyColor.HSL(100, 0.2f, 0.1f)).ToHSL().ToString() == "100 0.2 0.1");
+            Assert.IsTrue(new TinyColor(new TinyColor.HSLA(100, 0.2f, 0.1f, 0.38f)).ToHSLA().ToString() == "100 0.2 0.1 0.38");
+
+            // wrap out of bounds hue
+            Assert.IsTrue(new TinyColor(new TinyColor.HSL(-700, 0.2f, 0.1f)).ToHSL().ToString() == "20 0.2 0.1");
+            Assert.IsTrue(new TinyColor(new TinyColor.HSL(-490, 1.0f, 0.5f)).ToHSL().ToString() == "230 1 0.5");
+        }
+
+        [Test]
+        public void ShouldParseRGBString()
+        {
         }
     }
 }

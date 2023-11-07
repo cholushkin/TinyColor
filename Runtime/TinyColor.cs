@@ -447,6 +447,13 @@ namespace TinyColor
         }
 
 
+        public HSLA ToHSLA()
+        {
+            var hsl = Conversion.RGBToHSL(R, G, B);
+            return new HSLA(hsl.H, hsl.S, hsl.L, A);
+        }
+
+
         public HSV ToHSV()
         {
             return Conversion.RGBToHSV(R, G, B);
