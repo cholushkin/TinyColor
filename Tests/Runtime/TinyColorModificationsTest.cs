@@ -150,7 +150,6 @@ namespace TinyColor
         [Test]
         public void FromRGB()
         {
-            
 	        Assert.IsTrue(new TinyColor(new TinyColor.RGB(1,1,1)).ToHex8String() == "#FFFFFFFF");
 	        Assert.IsTrue(new TinyColor(new TinyColor.RGBA(1, 0, 0, 0.5f)).ToRGBA().ToString() == "1 0 0 0.5");
 	        Assert.IsTrue(new TinyColor(new TinyColor.RGBA(1, 0, 0, 1f)).ToRGB().ToString() == "1 0 0");
@@ -163,6 +162,25 @@ namespace TinyColor
             // note:
             // This type of rounding is often used to minimize the overall rounding error introduced by rounding multiple numbers.
             // It tends to spread the rounding error equally in both directions(up and down).
+        }
+
+        [Test]
+        public void ShouldParseHex()
+        {
+            Assert.IsTrue(TinyColor.ParseFromHex("#000").ToHex6String() == "#000000");
+            Assert.IsTrue(TinyColor.ParseFromHex("#0000").ToHex6String() == "#000000");
+            Assert.IsTrue(TinyColor.ParseFromHex("#000").A == 1.0f);
+            Assert.IsTrue(TinyColor.ParseFromHex("#0000").A == 0.0f);
+        }
+
+        [Test]
+        public void ParseRGB()
+        {
+            Assert.IsTrue(TinyColor.ParseFromRGB("1 0 0").ToHex6String() == "#FF0000");
+            Assert.IsTrue(new TinyColor(new TinyColor.RGB(1,0,0)).ToHex6String() == "#FF0000");
+            Assert.IsTrue(new TinyColor(new TinyColor.RGBA256(255, 0, 0, 255)).ToHex6String() == "#FF0000");
+            Assert.IsTrue(new TinyColor(new TinyColor.RGB256(200, 100, 0)).ToRGB256().ToString() == "200 100 0");
+            Assert.IsTrue(new TinyColor(new TinyColor.RGBA256(200, 100, 0, 8)).ToRGBA256().ToString() == "200 100 0 8");
         }
     }
 }

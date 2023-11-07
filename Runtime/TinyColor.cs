@@ -42,18 +42,34 @@ namespace TinyColor
             }
         }
 
-        public class RGBA256
+
+        public class RGB256
         {
             public byte R;
             public byte G;
             public byte B;
-            public byte A;
 
-            public RGBA256(byte r, byte g, byte b, byte a)
+            public RGB256(byte r, byte g, byte b)
             {
                 R = r;
                 G = g;
                 B = b;
+            }
+
+            public override string ToString()
+            {
+                return $"{R} {G} {B}";
+            }
+        }
+
+
+        public class RGBA256 : RGB256
+        {
+            public byte A;
+
+            public RGBA256(byte r, byte g, byte b, byte a)
+                : base(r, g, b)
+            {
                 A = a;
             }
 
@@ -180,6 +196,22 @@ namespace TinyColor
             A = colorRGBA.A;
         }
 
+        public TinyColor(RGB256 colorRGB256)
+        {
+            R = colorRGB256.R / 255f;
+            G = colorRGB256.G / 255f;
+            B = colorRGB256.B / 255f;
+            A = 1.0f;
+        }
+
+        public TinyColor(RGBA256 colorRGBA256)
+        {
+            R = colorRGBA256.R / 255f;
+            G = colorRGBA256.G / 255f;
+            B = colorRGBA256.B / 255f;
+            A = colorRGBA256.A / 255f;
+        }
+
         public TinyColor(HSL colorHSL) :
             this(Conversion.HSLToRGB(colorHSL.H, colorHSL.S, colorHSL.L))
         {
@@ -206,7 +238,7 @@ namespace TinyColor
         {
             if (tinyColor == null)
             {
-                R=G=B=A=A=1;
+                R = G = B = A = A = 1;
                 return;
             }
             R = tinyColor.R;
@@ -215,7 +247,7 @@ namespace TinyColor
             A = tinyColor.A;
         }
 
-        public TinyColor(string colorName):
+        public TinyColor(string colorName) :
             this(Color.Colors.GetValueOrDefault(colorName.ToLower()))
         {
         }
@@ -226,7 +258,7 @@ namespace TinyColor
 
         public object Clone()
         {
-	        return MemberwiseClone();
+            return MemberwiseClone();
         }
 
         public bool Equals(TinyColor other)
@@ -377,6 +409,11 @@ namespace TinyColor
         public RGBA256 ToRGBA256()
         {
             return new RGBA256((byte)Mathf.RoundToInt(R * 255), (byte)Mathf.RoundToInt(G * 255), (byte)Mathf.RoundToInt(B * 255), (byte)Mathf.RoundToInt(A * 255));
+        }
+
+        public RGB256 ToRGB256()
+        {
+            return new RGB256((byte)Mathf.RoundToInt(R * 255), (byte)Mathf.RoundToInt(G * 255), (byte)Mathf.RoundToInt(B * 255));
         }
 
 
