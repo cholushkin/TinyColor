@@ -19,6 +19,11 @@ namespace TinyColor
                 B = b;
             }
 
+            public RGB Normalize()
+            {
+	            return new RGB(Mathf.Clamp01(R), Mathf.Clamp01(G), Mathf.Clamp01(B));
+            }
+
             public override string ToString()
             {
                 return $"{R} {G} {B}";
@@ -34,6 +39,11 @@ namespace TinyColor
                 : base(r, g, b)
             {
                 A = a;
+            }
+
+            public RGBA Normalize()
+            {
+	            return new RGBA(Mathf.Clamp01(R), Mathf.Clamp01(G), Mathf.Clamp01(B), Mathf.Clamp01(A));
             }
 
             public override string ToString()
@@ -92,6 +102,11 @@ namespace TinyColor
                 L = l;
             }
 
+            public HSL Normalize()
+            {
+	            return new HSL(H, Mathf.Clamp01(S), Mathf.Clamp01(L));
+            }
+
             public override string ToString()
             {
                 return $"{H} {S} {L}";
@@ -107,6 +122,11 @@ namespace TinyColor
                 : base(h, s, l)
             {
                 A = a;
+            }
+
+            public HSLA Normalize()
+            {
+	            return new HSLA(H, Mathf.Clamp01(S), Mathf.Clamp01(L), Mathf.Clamp01(A));
             }
 
             public override string ToString()
@@ -127,6 +147,11 @@ namespace TinyColor
                 V = v;
             }
 
+            public HSV Normalize()
+            {
+	            return new HSV(H, Mathf.Clamp01(S), Mathf.Clamp01(V));
+            }
+
             public override string ToString()
             {
                 return $"{H} {S} {V}";
@@ -141,6 +166,11 @@ namespace TinyColor
                 : base(h, s, v)
             {
                 A = a;
+            }
+
+            public HSVA Normalize()
+            {
+	            return new HSVA(H, Mathf.Clamp01(S), Mathf.Clamp01(V), Mathf.Clamp01(A));
             }
 
             public override string ToString()
@@ -256,10 +286,17 @@ namespace TinyColor
         #endregion
 
 
+        public TinyColor Normalize()
+        {
+            return new TinyColor(new RGBA(R, G, B, A).Normalize());
+        }
+
+
         public object Clone()
         {
             return MemberwiseClone();
         }
+
 
         public bool Equals(TinyColor other)
         {
@@ -379,10 +416,17 @@ namespace TinyColor
 
             if (vals == null)
                 return default(TinyColor);
-            else if (vals.Count == 3)
-                return new TinyColor(new RGB256((byte)vals[0], (byte)vals[1], (byte)vals[2]));
-            else if (vals.Count == 4)
-                return new TinyColor(new RGBA256((byte)vals[0], (byte)vals[1], (byte)vals[2], (byte)vals[3]));
+            if (vals.Count == 3)
+                return new TinyColor(new RGB256(
+	                (byte)Mathf.Clamp(vals[0], 0, 255),
+	                (byte)Mathf.Clamp(vals[1], 0, 255),
+	                (byte)Mathf.Clamp(vals[2], 0, 255)));
+            if (vals.Count == 4)
+                return new TinyColor(new RGBA256(
+	                (byte)Mathf.Clamp(vals[0], 0, 255),
+	                (byte)Mathf.Clamp(vals[1], 0, 255),
+	                (byte)Mathf.Clamp(vals[2], 0, 255),
+                    (byte)Mathf.Clamp(vals[3], 0, 255)));
 
             return default(TinyColor);
         }
