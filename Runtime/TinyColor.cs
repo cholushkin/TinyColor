@@ -21,7 +21,7 @@ namespace TinyColor
 
             public RGB Normalize()
             {
-	            return new RGB(Mathf.Clamp01(R), Mathf.Clamp01(G), Mathf.Clamp01(B));
+                return new RGB(Mathf.Clamp01(R), Mathf.Clamp01(G), Mathf.Clamp01(B));
             }
 
             public override string ToString()
@@ -43,7 +43,7 @@ namespace TinyColor
 
             public RGBA Normalize()
             {
-	            return new RGBA(Mathf.Clamp01(R), Mathf.Clamp01(G), Mathf.Clamp01(B), Mathf.Clamp01(A));
+                return new RGBA(Mathf.Clamp01(R), Mathf.Clamp01(G), Mathf.Clamp01(B), Mathf.Clamp01(A));
             }
 
             public override string ToString()
@@ -104,7 +104,7 @@ namespace TinyColor
 
             public HSL Normalize()
             {
-	            return new HSL(H, Mathf.Clamp01(S), Mathf.Clamp01(L));
+                return new HSL(H, Mathf.Clamp01(S), Mathf.Clamp01(L));
             }
 
             public override string ToString()
@@ -126,7 +126,7 @@ namespace TinyColor
 
             public HSLA Normalize()
             {
-	            return new HSLA(H, Mathf.Clamp01(S), Mathf.Clamp01(L), Mathf.Clamp01(A));
+                return new HSLA(H, Mathf.Clamp01(S), Mathf.Clamp01(L), Mathf.Clamp01(A));
             }
 
             public override string ToString()
@@ -149,7 +149,7 @@ namespace TinyColor
 
             public HSV Normalize()
             {
-	            return new HSV(H, Mathf.Clamp01(S), Mathf.Clamp01(V));
+                return new HSV(H, Mathf.Clamp01(S), Mathf.Clamp01(V));
             }
 
             public override string ToString()
@@ -170,7 +170,7 @@ namespace TinyColor
 
             public HSVA Normalize()
             {
-	            return new HSVA(H, Mathf.Clamp01(S), Mathf.Clamp01(V), Mathf.Clamp01(A));
+                return new HSVA(H, Mathf.Clamp01(S), Mathf.Clamp01(V), Mathf.Clamp01(A));
             }
 
             public override string ToString()
@@ -305,6 +305,288 @@ namespace TinyColor
             return a.R.Equals(b.R) && a.G.Equals(b.G) && a.B.Equals(b.B) && a.A.Equals(b.A);
         }
 
+        /*
+         *  GetBrightness calculates the brightness of a color using a weighted sum of its red, green, and blue components. 
+         *  This calculation is based on the formula outlined in the "Web Content Accessibility Guidelines (WCAG)" for determining color contrast 
+         *  for accessibility (referenced in the comment with the link to W3C's AERT).
+         *  
+         *  The formula itself is derived from the formula for calculating the perceived luminance of a color. It uses different weightings
+         *  for the red, green, and blue components based on the sensitivity of the human eye to these colors.
+         *  
+         *  The weights are:
+         *  Red: 299
+         *  Green: 587
+         *  Blue: 114
+         *  
+         *  These weights are used because the human eye is more sensitive to green light and less sensitive to blue light compared to red. 
+         *  Therefore, the contributions of each color channel to the overall brightness are weighted accordingly.
+         *  The formula multiplies each color component by its respective weight, sums up these values, 
+         *  and divides the total by 1000 to obtain a brightness value.
+         *  
+         *  This brightness value is often used in accessibility contexts to determine the contrast between foreground and background colors. 
+         *  According to WCAG guidelines, text over a background should have sufficient contrast for readability, and this function can be 
+         *  used to evaluate the brightness of the background to determine suitable text colors for readability.
+         *  
+         *  https://www.w3.org/TR/AERT/#color-contrast
+        */
+        public float GetBrightness() // 0..1
+        {
+            var rgb = ToRGB().Normalize();
+            return (rgb.R * 299f + rgb.G * 587f + rgb.B * 114f) / 1000f;
+        }
+
+
+        public bool IsDark()
+        {
+            return GetBrightness() < 0.5f;
+        }
+
+
+        public bool IsLight()
+        {
+            return !IsDark();
+        }
+
+
+        // Returns the perceived luminance of a color, from 0-1.
+        // http://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
+        public float GetLuminance()
+        {
+            var r = R;
+            var g = G;
+            var b = B;
+
+            if (R <= 0.03928f)
+                r /= 12.92f;
+            else
+                r = Mathf.Pow((R + 0.055f) / 1.055f, 2.4f);
+
+            if (G <= 0.03928f)
+                g /= 12.92f;
+            else
+                g = Mathf.Pow((G + 0.055f) / 1.055f, 2.4f);
+
+            if (B <= 0.03928f)
+                b = B / 12.92f;
+            else
+                b = Mathf.Pow((B + 0.055f) / 1.055f, 2.4f);
+
+            return 0.2126f * r + 0.7152f * g + 0.0722f * b;
+        }
+
+
+        // Returns whether the color is monochrome.
+        public bool IsMonochrome()
+        {
+            return Mathf.Approximately(ToHSL().S, 0f);
+        }
+
+
+        // Lighten the color a given amount. Providing 1.0f will always return white.
+        public TinyColor Lighten(float amount = 0.1f)
+        {
+            var hsl = ToHSL();
+            hsl.L = Mathf.Clamp01(hsl.L + amount);
+            return new TinyColor(hsl);
+        }
+
+
+        // Brighten the color a given amount, from 0 to 1.
+        // amount - valid between 0-1
+        public TinyColor Brighten(float amount = 0.1f)
+        {
+            var rgb = ToRGB();
+
+            rgb.R = Mathf.Clamp01(rgb.R + amount);
+            rgb.G = Mathf.Clamp01(rgb.G + amount);
+            rgb.B = Mathf.Clamp01(rgb.B + amount);
+
+            return new TinyColor(rgb);
+        }
+
+        // Darken the color a given amount, from 0 to 1.Providing 1 will always return black.
+        public TinyColor Darken(float amount = 0.1f)
+        {
+            var hsl = ToHSL();
+            hsl.L = Mathf.Clamp01(hsl.L - amount);
+            return new TinyColor(hsl);
+        }
+
+
+        // Mix the current color a given amount with another color, from 0 to 1.
+        // 0 means no mixing (return current color).
+        public TinyColor Mix(TinyColor color, float amount = 0.5f)
+        {
+            var rgb1 = ToRGBA();
+            var rgb2 = color.ToRGBA();
+
+            float mixedAmount = Mathf.Clamp01(amount);
+            rgb1.R = (rgb2.R - rgb1.R) * mixedAmount + rgb1.R;
+            rgb1.G = (rgb2.G - rgb1.G) * mixedAmount + rgb1.G;
+            rgb1.B = (rgb2.B - rgb1.B) * mixedAmount + rgb1.B;
+            rgb1.A = (rgb2.A - rgb1.A) * mixedAmount + rgb1.A;
+
+            return new TinyColor(rgb1);
+        }
+
+
+        //  Mix the color with pure white, from 0 to 1.
+        // Providing 0 will do nothing, providing 100 will always return white.
+        public TinyColor Tint(float amount = 0.1f)
+        {
+            return Mix(new TinyColor(Color.White), amount);
+        }
+
+
+        // Mix the color with pure black, from 0 to 1.
+        // Providing 0 will do nothing, providing 1 will always return black.
+        public TinyColor Shade(float amount = 0.1f)
+        {
+            return Mix(new TinyColor(Color.Black), amount);
+        }
+
+
+        // Desaturate the color a given amount, from 0 to 1.
+        // Providing 1 is the same as calling greyscale
+        public TinyColor Desaturate(float amount = 0.1f)
+        {
+            var hsl = ToHSL();
+            hsl.S = Mathf.Clamp01(hsl.S - amount);
+            return new TinyColor(hsl);
+        }
+
+
+        // Saturate the color a given amount, from 0 to 1.
+        public TinyColor Saturate(float amount = 0.1f)
+        {
+            var hsl = ToHSL();
+            hsl.S = Mathf.Clamp01(hsl.S + amount);
+            return new TinyColor(hsl);
+        }
+
+
+        // Completely desaturates a color into greyscale.
+        public TinyColor Greyscale()
+        {
+            return Desaturate(1f);
+        }
+
+
+        // Spin takes a positive or negative amount within [-360, 360] indicating the change of hue.
+        // Values outside of this range will be wrapped into this range.
+        public TinyColor Spin(float amount)
+        {
+            var hsl = ToHSL();
+            float hue = (hsl.H + amount) % 360;
+            hsl.H = hue < 0 ? 360 + hue : hue;
+            return new TinyColor(hsl);
+        }
+
+
+        public List<TinyColor> Analogous(int results = 6, int slices = 30)
+        {
+            var hsl = ToHSL();
+            float part = 360f / slices;
+            List<TinyColor> ret = new List<TinyColor> { this };
+
+            for (hsl.H = (hsl.H - ((part * results) / 2) + 720) % 360; results-- > 0;)
+            {
+                hsl.H = (hsl.H + part) % 360;
+                ret.Add(new TinyColor(hsl));
+            }
+
+            return ret;
+        }
+
+
+        public TinyColor Complement()
+        {
+            var hsl = ToHSL();
+            hsl.H = (hsl.H + 180) % 360f;
+            return new TinyColor(hsl);
+        }
+
+
+        public List<TinyColor> Monochromatic(int results = 6)
+        {
+            var hsv = ToHSV();
+            var h = hsv.H;
+            var s = hsv.S;
+            var v = hsv.V;
+            var res = new List<TinyColor>();
+
+            float modification = 1f / results;
+
+            while (results-- > 0)
+            {
+                res.Add(new TinyColor(new HSV(h, s, v)));
+                v = (v + modification) % 1f;
+            }
+
+            return res;
+        }
+
+
+        public List<TinyColor> SplitComplement()
+        {
+            var hsl = ToHSL();
+            var h = hsl.H;
+
+            return new List<TinyColor>
+            {
+                this,
+                new TinyColor( new HSL( (h + 72) % 360f, hsl.S, hsl.L)),
+                new TinyColor( new HSL( (h + 216) % 360f, hsl.S, hsl.L))
+            };
+        }
+
+
+        // Compute how the color would appear on a background
+        public TinyColor OnBackground(TinyColor background)
+        {
+            var fg = ToRGBA();
+            var bg = background;
+            var alpha = fg.A + bg.A * (1 - fg.A);
+
+            return new TinyColor(new RGBA(
+                R = (fg.R * fg.A + bg.R * bg.A * (1 - fg.A)) / alpha,
+                G = (fg.G * fg.A + bg.G * bg.A * (1 - fg.A)) / alpha,
+                B = (fg.B * fg.A + bg.B * bg.A * (1 - fg.A)) / alpha,
+                A = alpha
+            ));
+        }
+
+
+        public List<TinyColor> Triad()
+        {
+            return Polyad(3);
+        }
+
+
+        public List<TinyColor> Tetrad()
+        {
+            return Polyad(4);
+        }
+
+
+        //  Get polyad colors, like (for 1, 2, 3, 4, 5, 6, 7, 8, etc...)
+        // monad, dyad, triad, tetrad, pentad, hexad, heptad, octad, etc...
+        public List<TinyColor> Polyad(int n)
+        {
+            var hsl = ToHSL();
+            var h = hsl.H;
+
+            var result = new List<TinyColor> { this };
+            var increment = 360f / n;
+
+            for (int i = 1; i < n; i++)
+                result.Add(new TinyColor(new HSL((h + i * increment) % 360f, hsl.S, hsl.L)));
+
+            return result;
+        }
+
+
+
         #region Parse from different string representation
 
         public static TinyColor ParseFromName(string nameString)
@@ -356,7 +638,7 @@ namespace TinyColor
                 }
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -384,10 +666,10 @@ namespace TinyColor
                 }
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
-            }            
+            }
         }
 
 
@@ -397,7 +679,7 @@ namespace TinyColor
                 return default(TinyColor);
             var vals = GetFloats(rgbString, true);
 
-            if(vals == null)
+            if (vals == null)
                 return default(TinyColor);
             else if (vals.Count == 3)
                 return new TinyColor(new RGB(vals[0], vals[1], vals[2]));
@@ -418,14 +700,14 @@ namespace TinyColor
                 return default(TinyColor);
             if (vals.Count == 3)
                 return new TinyColor(new RGB256(
-	                (byte)Mathf.Clamp(vals[0], 0, 255),
-	                (byte)Mathf.Clamp(vals[1], 0, 255),
-	                (byte)Mathf.Clamp(vals[2], 0, 255)));
+                    (byte)Mathf.Clamp(vals[0], 0, 255),
+                    (byte)Mathf.Clamp(vals[1], 0, 255),
+                    (byte)Mathf.Clamp(vals[2], 0, 255)));
             if (vals.Count == 4)
                 return new TinyColor(new RGBA256(
-	                (byte)Mathf.Clamp(vals[0], 0, 255),
-	                (byte)Mathf.Clamp(vals[1], 0, 255),
-	                (byte)Mathf.Clamp(vals[2], 0, 255),
+                    (byte)Mathf.Clamp(vals[0], 0, 255),
+                    (byte)Mathf.Clamp(vals[1], 0, 255),
+                    (byte)Mathf.Clamp(vals[2], 0, 255),
                     (byte)Mathf.Clamp(vals[3], 0, 255)));
 
             return default(TinyColor);
@@ -525,7 +807,7 @@ namespace TinyColor
         }
 
 
-        public RGB ToRGBA()
+        public RGBA ToRGBA()
         {
             return new RGBA(R, G, B, A);
         }
@@ -566,6 +848,13 @@ namespace TinyColor
         {
             var hsv = Conversion.RGBToHSV(R, G, B);
             return new HSVA(hsv.H, hsv.S, hsv.V, A);
+        }
+
+
+        public int ToNumber()
+        {
+            var rgb = ToRGB256();
+            return (rgb.R << 16) + (rgb.G << 8) + rgb.B;
         }
         #endregion
     }

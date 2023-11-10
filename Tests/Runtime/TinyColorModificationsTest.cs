@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -332,6 +333,16 @@ namespace TinyColor
 		[Test]
 		public void ShouldGetBrightness()
 		{
-		}
+			foreach(var kv in Color.Colors)
+			{
+				var brightness = kv.Value.GetBrightness();
+				Debug.Log(brightness);
+                //Assert.IsTrue(brightness <= 1f);
+                //Assert.IsTrue(brightness >= 0f);
+            }
+
+            Assert.IsTrue(TinyColor.ParseFromHex("#000").GetBrightness() == 0f);
+            Assert.IsTrue(TinyColor.ParseFromHex("#FFF").GetBrightness() == 1f);
+        }
 	}
 }
