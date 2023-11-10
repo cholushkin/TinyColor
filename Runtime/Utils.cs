@@ -42,7 +42,7 @@ namespace TinyColor
         public static string Pad2(string c)
         {
             return c.Length == 1 ? "0" + c : c;
-        }       
+        }
     }
 
 }

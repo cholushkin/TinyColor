@@ -95,7 +95,7 @@ namespace TinyColor
         {
             foreach (var c in _conversions)
             {
-                TinyColor tiny = TinyColor.ParseFromHSV( c.hsv );
+                TinyColor tiny = TinyColor.ParseFromHSV(c.hsv);
                 Assert.AreEqual(tiny.ToHex8String(), new TinyColor(tiny.ToHSV()).ToHex8String());
             }
         }
@@ -104,14 +104,14 @@ namespace TinyColor
         [Test]
         public void HSVString()
         {
-            foreach (var c in _conversions) 
+            foreach (var c in _conversions)
             {
                 TinyColor tiny = TinyColor.ParseFromHex(c.hex6);
                 var input = tiny.ToRGBA256();
 
                 var output = TinyColor.ParseFromHSV(tiny.ToHSV().ToString()).ToRGBA256();
                 var maxDiff = 0;
-                
+
                 Assert.IsTrue(Mathf.Abs(input.R - output.R) <= maxDiff); // Check Red value difference
                 Assert.IsTrue(Mathf.Abs(input.G - output.G) <= maxDiff); // Check Green value difference
                 Assert.IsTrue(Mathf.Abs(input.B - output.B) <= maxDiff); // Check Blue value difference
@@ -125,7 +125,7 @@ namespace TinyColor
             foreach (var c in _conversions)
             {
                 TinyColor tiny = TinyColor.ParseFromHex(c.hex6);
-                Assert.AreEqual(tiny.ToHex8String(), new TinyColor ( tiny.ToRGB() ).ToHex8String());
+                Assert.AreEqual(tiny.ToHex8String(), new TinyColor(tiny.ToRGB()).ToHex8String());
             }
         }
 
@@ -148,6 +148,15 @@ namespace TinyColor
                 TinyColor tiny = TinyColor.ParseFromHex(c.hex6);
                 Assert.AreEqual(tiny.ToHex8String(), new TinyColor(tiny).ToHex8String());
             }
+        }
+
+        [Test]
+        public void BadHex()
+        {
+            Assert.IsNull(TinyColor.ParseFromHex("#ff00a"));
+            Assert.IsNull(TinyColor.ParseFromHex("ff000"));
+            Assert.IsNull(TinyColor.ParseFromHex("#ff000"));
+            Assert.IsNull(TinyColor.ParseFromHex("#ff00000000"));
         }
     }
 }
