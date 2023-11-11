@@ -336,9 +336,8 @@ namespace TinyColor
             foreach (var kv in Color.Colors)
             {
                 var brightness = kv.Value.GetBrightness();
-                Debug.Log(brightness);
-                //Assert.IsTrue(brightness <= 1f);
-                //Assert.IsTrue(brightness >= 0f);
+                Assert.IsTrue(brightness <= 1f);
+                Assert.IsTrue(brightness >= 0f);
             }
 
             Assert.IsTrue(TinyColor.ParseFromHex("#000").GetBrightness() == 0f);
@@ -416,35 +415,330 @@ namespace TinyColor
         [Test]
         public void ColorIsReadable()
         {
-            //// "#ff0088", "#8822aa" (values used in old WCAG1 tests)
-            //expect(isReadable('#000000', '#ffffff', { level: 'AA', size: 'small' })).toBe(true);
-            //expect(isReadable('#ff0088', '#5c1a72', { })).toBe(false);
-            //expect(isReadable('#ff0088', '#8822aa', { level: 'AA', size: 'small' })).toBe(false);
-            //expect(isReadable('#ff0088', '#8822aa', { level: 'AA', size: 'large' })).toBe(false);
-            //expect(isReadable('#ff0088', '#8822aa', { level: 'AAA', size: 'small' })).toBe(false);
-            //expect(isReadable('#ff0088', '#8822aa', { level: 'AAA', size: 'large' })).toBe(false);
+            // "#ff0088", "#8822aa" (values used in old WCAG1 tests)
+            Assert.IsTrue(ReadabilityHelpers.IsReadable(TinyColor.ParseFromHex("#000000"), TinyColor.ParseFromHex("#ffffff"), ReadabilityHelpers.WCAGLevel.AA, ReadabilityHelpers.WCAGSize.Small));
+            Assert.IsFalse(ReadabilityHelpers.IsReadable(TinyColor.ParseFromHex("#ff0088"), TinyColor.ParseFromHex("#5c1a72")));
+            Assert.IsFalse(ReadabilityHelpers.IsReadable(TinyColor.ParseFromHex("#ff0088"), TinyColor.ParseFromHex("#8822aa"), ReadabilityHelpers.WCAGLevel.AA, ReadabilityHelpers.WCAGSize.Small));
+            Assert.IsFalse(ReadabilityHelpers.IsReadable(TinyColor.ParseFromHex("#ff0088"), TinyColor.ParseFromHex("#8822aa"), ReadabilityHelpers.WCAGLevel.AA, ReadabilityHelpers.WCAGSize.Large));
+            Assert.IsFalse(ReadabilityHelpers.IsReadable(TinyColor.ParseFromHex("#ff0088"), TinyColor.ParseFromHex("#8822aa"), ReadabilityHelpers.WCAGLevel.AAA, ReadabilityHelpers.WCAGSize.Small));
+            Assert.IsFalse(ReadabilityHelpers.IsReadable(TinyColor.ParseFromHex("#ff0088"), TinyColor.ParseFromHex("#8822aa"), ReadabilityHelpers.WCAGLevel.AAA, ReadabilityHelpers.WCAGSize.Small));
 
-            //// values derived from and validated using the calculators at http://www.dasplankton.de/ContrastA/
-            //// and http://webaim.org/resources/contrastchecker/
+            // values derived from and validated using the calculators at http://www.dasplankton.de/ContrastA/
+            // and http://webaim.org/resources/contrastchecker/
 
-            //// "#ff0088", "#5c1a72": contrast ratio 3.04
-            //expect(isReadable('#ff0088', '#5c1a72', { level: 'AA', size: 'small' })).toBe(false);
-            //expect(isReadable('#ff0088', '#5c1a72', { level: 'AA', size: 'large' })).toBe(true);
-            //expect(isReadable('#ff0088', '#5c1a72', { level: 'AAA', size: 'small' })).toBe(false);
-            //expect(isReadable('#ff0088', '#5c1a72', { level: 'AAA', size: 'large' })).toBe(false);
+            // "#ff0088", "#5c1a72": contrast ratio 3.04
+            Assert.IsFalse(ReadabilityHelpers.IsReadable(TinyColor.ParseFromHex("#ff0088"), TinyColor.ParseFromHex("#5c1a72"), ReadabilityHelpers.WCAGLevel.AA, ReadabilityHelpers.WCAGSize.Small));
+            Assert.IsTrue(ReadabilityHelpers.IsReadable(TinyColor.ParseFromHex("#ff0088"), TinyColor.ParseFromHex("#5c1a72"), ReadabilityHelpers.WCAGLevel.AA, ReadabilityHelpers.WCAGSize.Large));
+            Assert.IsFalse(ReadabilityHelpers.IsReadable(TinyColor.ParseFromHex("#ff0088"), TinyColor.ParseFromHex("#5c1a72"), ReadabilityHelpers.WCAGLevel.AAA, ReadabilityHelpers.WCAGSize.Small));
+            Assert.IsFalse(ReadabilityHelpers.IsReadable(TinyColor.ParseFromHex("#ff0088"), TinyColor.ParseFromHex("#5c1a72"), ReadabilityHelpers.WCAGLevel.AAA, ReadabilityHelpers.WCAGSize.Large));
 
-            //// "#ff0088", "#2e0c3a": contrast ratio 4.56
-            //expect(isReadable('#ff0088', '#2e0c3a', { level: 'AA', size: 'small' })).toBe(true);
-            //expect(isReadable('#ff0088', '#2e0c3a', { level: 'AA', size: 'large' })).toBe(true);
-            //expect(isReadable('#ff0088', '#2e0c3a', { level: 'AAA', size: 'small' })).toBe(false);
-            //expect(isReadable('#ff0088', '#2e0c3a', { level: 'AAA', size: 'large' })).toBe(true);
+            // "#ff0088", "#2e0c3a": contrast ratio 4.56
+            Assert.IsTrue(ReadabilityHelpers.IsReadable(TinyColor.ParseFromHex("#ff0088"), TinyColor.ParseFromHex("#2e0c3a"), ReadabilityHelpers.WCAGLevel.AA, ReadabilityHelpers.WCAGSize.Small));
+            Assert.IsTrue(ReadabilityHelpers.IsReadable(TinyColor.ParseFromHex("#ff0088"), TinyColor.ParseFromHex("#2e0c3a"), ReadabilityHelpers.WCAGLevel.AA, ReadabilityHelpers.WCAGSize.Large));
+            Assert.IsFalse(ReadabilityHelpers.IsReadable(TinyColor.ParseFromHex("#ff0088"), TinyColor.ParseFromHex("#2e0c3a"), ReadabilityHelpers.WCAGLevel.AAA, ReadabilityHelpers.WCAGSize.Small));
+            Assert.IsTrue(ReadabilityHelpers.IsReadable(TinyColor.ParseFromHex("#ff0088"), TinyColor.ParseFromHex("#2e0c3a"), ReadabilityHelpers.WCAGLevel.AAA, ReadabilityHelpers.WCAGSize.Large));
 
-            //// "#db91b8", "#2e0c3a":  contrast ratio 7.12
-            //expect(isReadable('#db91b8', '#2e0c3a', { level: 'AA', size: 'small' })).toBe(true);
-            //expect(isReadable('#db91b8', '#2e0c3a', { level: 'AA', size: 'large' })).toBe(true);
-            //expect(isReadable('#db91b8', '#2e0c3a', { level: 'AAA', size: 'small' })).toBe(true);
-            //expect(isReadable('#db91b8', '#2e0c3a', { level: 'AAA', size: 'large' })).toBe(true);
-            //expect(isReadable('#db91b8', '#2e0c3a', { level: 'ZZZ', size: 'large' } as any)).toBe(false);
+            // "#db91b8", "#2e0c3a":  contrast ratio 7.12
+            Assert.IsTrue(ReadabilityHelpers.IsReadable(TinyColor.ParseFromHex("#db91b8"), TinyColor.ParseFromHex("#2e0c3a"), ReadabilityHelpers.WCAGLevel.AA, ReadabilityHelpers.WCAGSize.Small));
+            Assert.IsTrue(ReadabilityHelpers.IsReadable(TinyColor.ParseFromHex("#db91b8"), TinyColor.ParseFromHex("#2e0c3a"), ReadabilityHelpers.WCAGLevel.AA, ReadabilityHelpers.WCAGSize.Large));
+            Assert.IsTrue(ReadabilityHelpers.IsReadable(TinyColor.ParseFromHex("#db91b8"), TinyColor.ParseFromHex("#2e0c3a"), ReadabilityHelpers.WCAGLevel.AAA, ReadabilityHelpers.WCAGSize.Small));
+            Assert.IsTrue(ReadabilityHelpers.IsReadable(TinyColor.ParseFromHex("#db91b8"), TinyColor.ParseFromHex("#2e0c3a"), ReadabilityHelpers.WCAGLevel.AAA, ReadabilityHelpers.WCAGSize.Large));
+        }
+
+        [Test]
+        public void Readabilty()
+        {
+            //// check return values from readability function. See isReadable above for standards tests.
+            //expect(readability('#000', '#000')).toBe(1);
+            //expect(readability('#000', '#111')).toBe(1.1121078324840545);
+            //expect(readability('#000', '#fff')).toBe(21);
+        }
+
+        [Test]
+        public void MostReadable() 
+        {
+
+            //    *it('mostReadable', () =>
+            //    {
+            //    expect(mostReadable('#000', ['#111', '#222'])!.toHexString()).toBe('#222222');
+            //    expect(mostReadable('#f00', ['#d00', '#0d0'])!.toHexString()).toBe('#00dd00');
+            //    expect(
+            //      mostReadable(new TinyColor('#f00'), [
+            //        new TinyColor('#d00'),
+            //        new TinyColor('#0d0'),
+            //      ])!.toHexString(),
+
+            //    ).toBe('#00dd00');
+            //    expect(mostReadable('#fff', ['#fff', '#fff'])!.toHexString()).toBe('#ffffff');
+            //    // includeFallbackColors
+            //    expect(
+            //      mostReadable('#fff', ['#fff', '#fff'], { includeFallbackColors: true })!.toHexString(),
+            //            ).toBe('#000000');
+            //    // no readable color in list
+            //    expect(
+            //      mostReadable('#123', ['#124', '#125'], { includeFallbackColors: false })!.toHexString(),
+            //            ).toBe('#112255');
+            //    expect(
+            //      mostReadable('#123', ['#000', '#fff'], { includeFallbackColors: false })!.toHexString(),
+            //            ).toBe('#ffffff');
+            //    // no readable color in list
+            //    expect(
+            //      mostReadable('#123', ['#124', '#125'], { includeFallbackColors: true })!.toHexString(),
+            //            ).toBe('#ffffff');
+
+            //    expect(
+            //      mostReadable('#ff0088', ['#000', '#fff'], { includeFallbackColors: false })!.toHexString(),
+            //            ).toBe('#000000');
+            //    expect(
+            //      mostReadable('#ff0088', ['#2e0c3a'], {
+            //    includeFallbackColors: true,
+            //                level: 'AAA',
+            //                size: 'large',
+            //              })!.toHexString(),
+            //            ).toBe('#2e0c3a');
+            //    expect(
+            //      mostReadable('#ff0088', ['#2e0c3a'], {
+            //    includeFallbackColors: true,
+            //                level: 'AAA',
+            //                size: 'small',
+            //              })!.toHexString(),
+            //            ).toBe('#000000');
+
+            //    expect(
+            //      mostReadable('#371b2c', ['#000', '#fff'], { includeFallbackColors: false })!.toHexString(),
+            //            ).toBe('#ffffff');
+            //    expect(
+            //      mostReadable('#371b2c', ['#a9acb6'], {
+            //    includeFallbackColors: true,
+            //                level: 'AAA',
+            //                size: 'large',
+            //              })!.toHexString(),
+            //            ).toBe('#a9acb6');
+            //    expect(
+            //      mostReadable('#371b2c', ['#a9acb6'], {
+            //    includeFallbackColors: true,
+            //                level: 'AAA',
+            //                size: 'small',
+            //              })!.toHexString(),
+            //            ).toBe('#ffffff');
+            //});
+             
+        }
+
+        [Test]
+        public void ToMsFilter()
+        {
+            //*it('should create microsoft filter', () =>
+            //{
+            //    expect(toMsFilter('red')).toBe(
+            //      'progid:DXImageTransform.Microsoft.gradient(startColorstr=#ffff0000,endColorstr=#ffff0000)',
+
+            //    );
+            //    expect(toMsFilter('red', 'blue')).toBe(
+            //      'progid:DXImageTransform.Microsoft.gradient(startColorstr=#ffff0000,endColorstr=#ff0000ff)',
+
+            //    );
+
+            //    expect(toMsFilter('transparent')).toBe(
+            //      'progid:DXImageTransform.Microsoft.gradient(startColorstr=#00000000,endColorstr=#00000000)',
+
+            //    );
+            //    expect(toMsFilter('transparent', 'red')).toBe(
+            //      'progid:DXImageTransform.Microsoft.gradient(startColorstr=#00000000,endColorstr=#ffff0000)',
+
+            //    );
+
+            //    expect(toMsFilter('#f0f0f0dd')).toBe(
+            //      'progid:DXImageTransform.Microsoft.gradient(startColorstr=#ddf0f0f0,endColorstr=#ddf0f0f0)',
+
+            //    );
+            //    expect(toMsFilter('rgba(0, 0, 255, .5')).toBe(
+            //      'progid:DXImageTransform.Microsoft.gradient(startColorstr=#800000ff,endColorstr=#800000ff)',
+
+            //    );
+            //});
+        }
+
+        [Test]
+        public void Modification()
+        {
+
+            //it('Modifications', () =>
+            //{
+            //    for (let i = 0; i <= 100; i++)
+            //    {
+            //        expect(new TinyColor('red').desaturate(i).toHex()).toBe(DESATURATIONS[i]);
+            //    }
+
+            //    for (let i = 0; i <= 100; i++)
+            //    {
+            //        expect(new TinyColor('red').saturate(i).toHex()).toBe(SATURATIONS[i]);
+            //    }
+
+            //    for (let i = 0; i <= 100; i++)
+            //    {
+            //        expect(new TinyColor('red').lighten(i).toHex()).toBe(LIGHTENS[i]);
+            //    }
+
+            //    for (let i = 0; i <= 100; i++)
+            //    {
+            //        expect(new TinyColor('red').brighten(i).toHex()).toBe(BRIGHTENS[i]);
+            //    }
+
+            //    for (let i = 0; i <= 100; i++)
+            //    {
+            //        expect(new TinyColor('red').darken(i).toHex()).toBe(DARKENS[i]);
+            //    }
+
+            //    for (let i = 0; i <= 100; i++)
+            //    {
+            //        expect(new TinyColor('red').tint(i).toHex()).toBe(TINTS[i]);
+            //    }
+
+            //    for (let i = 0; i <= 100; i++)
+            //    {
+            //        expect(new TinyColor('red').shade(i).toHex()).toBe(SHADES[i]);
+            //    }
+
+            //    expect(new TinyColor('red').greyscale().toHex()).toBe('808080');
+            //});
+        }
+
+        [Test]
+        public void Spin()
+        {
+            //*it('Spin', () =>
+            //{
+            //    expect(Math.round(new TinyColor('#f00').spin(-1234).toHsl().h)).toBe(206);
+            //    expect(Math.round(new TinyColor('#f00').spin(-360).toHsl().h)).toBe(0);
+            //    expect(Math.round(new TinyColor('#f00').spin(-120).toHsl().h)).toBe(240);
+            //    expect(Math.round(new TinyColor('#f00').spin(0).toHsl().h)).toBe(0);
+            //    expect(Math.round(new TinyColor('#f00').spin(10).toHsl().h)).toBe(10);
+            //    expect(Math.round(new TinyColor('#f00').spin(360).toHsl().h)).toBe(0);
+            //    expect(Math.round(new TinyColor('#f00').spin(2345).toHsl().h)).toBe(185);
+
+            //    [-360, 0, 360].forEach(delta =>
+            //    {
+            //        Object.keys(names).forEach(name =>
+            //        {
+            //            expect(new TinyColor(name).toHex()).toBe(new TinyColor(name).spin(delta).toHex());
+            //        });
+            //    });
+            //});
+
+        }
+
+        [Test]
+        public void Mix()
+        {
+            //    it('Mix', () => {
+            //        // amount 0 or none
+            //        expect(new TinyColor('#000').mix('#fff').toHsl().l).toBe(0.5);
+            //        expect(new TinyColor('#f00').mix('#000', 0).toHex()).toBe('ff0000');
+            //        // This case checks the the problem with floating point numbers (eg 255/90)
+            //        expect(new TinyColor('#fff').mix('#000', 90).toHex()).toBe('1a1a1a');
+
+            //        // black and white
+            //        for (let i = 0; i < 100; i++)
+            //        {
+            //            expect(Math.round(new TinyColor('#000').mix('#fff', i).toHsl().l * 100) / 100).toBe(i / 100);
+            //        }
+
+            //        // with colors
+            //        for (let i = 0; i < 100; i++)
+            //        {
+            //            let newHex = Math.round((255 * (100 - i)) / 100).toString(16);
+
+            //            if (newHex.length === 1)
+            //            {
+            //                newHex = '0' + newHex;
+            //            }
+
+            //            expect(new TinyColor('#f00').mix('#000', i).toHex()).toBe(newHex + '0000');
+            //            expect(new TinyColor('#0f0').mix('#000', i).toHex()).toBe(`00${ newHex}
+            //            00`);
+            //        expect(new TinyColor('#00f').mix('#000', i).toHex()).toBe('0000' + newHex);
+            //        expect(new TinyColor('transparent').mix('#000', i).toRgb().a).toBe(i / 100);
+            //    }
+            //});
+        }
+
+        [Test]
+        public void OnBackground()
+        {
+            //it('onBackground', () => {
+            //    expect(new TinyColor('#ffffff').onBackground('#000').toHex()).toBe('ffffff');
+            //    expect(new TinyColor('#ffffff00').onBackground('#000').toHex()).toBe('000000');
+            //    expect(new TinyColor('#ffffff77').onBackground('#000').toHex()).toBe('777777');
+            //    expect(new TinyColor('#262a6d82').onBackground('#644242').toHex()).toBe('443658');
+            //    expect(new TinyColor('rgba(255,0,0,0.5)').onBackground('rgba(0,255,0,0.5)').toRgbString()).toBe(
+            //      'rgba(170, 85, 0, 0.75)',
+
+            //    );
+            //    expect(new TinyColor('rgba(255,0,0,0.5)').onBackground('rgba(0,0,255,1)').toRgbString()).toBe(
+            //      'rgb(128, 0, 128)',
+
+            //    );
+            //    expect(new TinyColor('rgba(0,0,255,1)').onBackground('rgba(0,0,0,0.5)').toRgbString()).toBe(
+            //      'rgb(0, 0, 255)',
+
+            //    );
+            //});
+        }
+
+        [Test]
+        public void Compliment()
+        {
+            //it('complement', () => {
+            //    const complementDoesntModifyInstance = new TinyColor('red');
+            //    expect(complementDoesntModifyInstance.complement().toHex()).toBe('00ffff');
+            //    expect(complementDoesntModifyInstance.toHex()).toBe('ff0000');
+            //});
+        }
+
+        [Test]
+        public void Analogous()
+        {
+            //it('analogous', () => {
+            //    const combination = new TinyColor('red').analogous();
+            //    expect(colorsToHexString(combination)).toBe('ff0000,ff0066,ff0033,ff0000,ff3300,ff6600');
+            //});
+        }
+
+        [Test]
+        public void Monochromatic()
+        {
+            //it('monochromatic', () => {
+            //    const combination = new TinyColor('red').monochromatic();
+            //    expect(colorsToHexString(combination)).toBe('ff0000,2a0000,550000,800000,aa0000,d40000');
+            //});
+        }
+
+        [Test]
+        public void SplitComplement()
+        {
+            //it('splitcomplement', () => {
+            //    const combination = new TinyColor('red').splitcomplement();
+            //    expect(colorsToHexString(combination)).toBe('ff0000,ccff00,0066ff');
+            //});
+        }
+
+        [Test]
+        public void Triad()
+        {
+            //it('triad', () => {
+            //    const combination = new TinyColor('red').triad();
+            //    expect(colorsToHexString(combination)).toBe('ff0000,00ff00,0000ff');
+            //});
+        }
+
+        [Test]
+        public void Tetrad()
+        {
+            //it('tetrad', () => {
+            //    const combination = new TinyColor('red').tetrad();
+            //    expect(colorsToHexString(combination)).toBe('ff0000,80ff00,00ffff,7f00ff');
+            //});
         }
     }
 }
