@@ -86,7 +86,7 @@ namespace TinyColor
             }
 
             includeFallbackColors = false;
-            return MostReadable(baseColor, new List<TinyColor> { new TinyColor("#fff"), new TinyColor("#000") }, includeFallbackColors, level, size);
+            return MostReadable(baseColor, new List<TinyColor> { TinyColor.ParseFromHex("#fff"), TinyColor.ParseFromHex("#000") }, includeFallbackColors, level, size);
         }
     }
 }

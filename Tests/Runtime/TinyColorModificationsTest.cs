@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using NUnit.Framework;
 using UnityEngine;
@@ -448,81 +449,54 @@ namespace TinyColor
         [Test]
         public void Readabilty()
         {
-            //// check return values from readability function. See isReadable above for standards tests.
-            //expect(readability('#000', '#000')).toBe(1);
-            //expect(readability('#000', '#111')).toBe(1.1121078324840545);
-            //expect(readability('#000', '#fff')).toBe(21);
+            // check return values from readability function. See isReadable above for standards tests.
+            Assert.IsTrue(Mathf.Approximately(ReadabilityHelpers.Readability(TinyColor.ParseFromHex("#000"), TinyColor.ParseFromHex("#000")), 1f));
+            Assert.IsTrue(Mathf.Approximately(ReadabilityHelpers.Readability(TinyColor.ParseFromHex("#000"), TinyColor.ParseFromHex("#111")), 1.1121078324840545f));
+            Assert.IsTrue(Mathf.Approximately(ReadabilityHelpers.Readability(TinyColor.ParseFromHex("#000"), TinyColor.ParseFromHex("#fff")), 21f));
         }
 
         [Test]
         public void MostReadable() 
         {
-
-            //    *it('mostReadable', () =>
-            //    {
-            //    expect(mostReadable('#000', ['#111', '#222'])!.toHexString()).toBe('#222222');
-            //    expect(mostReadable('#f00', ['#d00', '#0d0'])!.toHexString()).toBe('#00dd00');
-            //    expect(
-            //      mostReadable(new TinyColor('#f00'), [
-            //        new TinyColor('#d00'),
-            //        new TinyColor('#0d0'),
-            //      ])!.toHexString(),
-
-            //    ).toBe('#00dd00');
-            //    expect(mostReadable('#fff', ['#fff', '#fff'])!.toHexString()).toBe('#ffffff');
-            //    // includeFallbackColors
-            //    expect(
-            //      mostReadable('#fff', ['#fff', '#fff'], { includeFallbackColors: true })!.toHexString(),
-            //            ).toBe('#000000');
-            //    // no readable color in list
-            //    expect(
-            //      mostReadable('#123', ['#124', '#125'], { includeFallbackColors: false })!.toHexString(),
-            //            ).toBe('#112255');
-            //    expect(
-            //      mostReadable('#123', ['#000', '#fff'], { includeFallbackColors: false })!.toHexString(),
-            //            ).toBe('#ffffff');
-            //    // no readable color in list
-            //    expect(
-            //      mostReadable('#123', ['#124', '#125'], { includeFallbackColors: true })!.toHexString(),
-            //            ).toBe('#ffffff');
-
-            //    expect(
-            //      mostReadable('#ff0088', ['#000', '#fff'], { includeFallbackColors: false })!.toHexString(),
-            //            ).toBe('#000000');
-            //    expect(
-            //      mostReadable('#ff0088', ['#2e0c3a'], {
-            //    includeFallbackColors: true,
-            //                level: 'AAA',
-            //                size: 'large',
-            //              })!.toHexString(),
-            //            ).toBe('#2e0c3a');
-            //    expect(
-            //      mostReadable('#ff0088', ['#2e0c3a'], {
-            //    includeFallbackColors: true,
-            //                level: 'AAA',
-            //                size: 'small',
-            //              })!.toHexString(),
-            //            ).toBe('#000000');
-
-            //    expect(
-            //      mostReadable('#371b2c', ['#000', '#fff'], { includeFallbackColors: false })!.toHexString(),
-            //            ).toBe('#ffffff');
-            //    expect(
-            //      mostReadable('#371b2c', ['#a9acb6'], {
-            //    includeFallbackColors: true,
-            //                level: 'AAA',
-            //                size: 'large',
-            //              })!.toHexString(),
-            //            ).toBe('#a9acb6');
-            //    expect(
-            //      mostReadable('#371b2c', ['#a9acb6'], {
-            //    includeFallbackColors: true,
-            //                level: 'AAA',
-            //                size: 'small',
-            //              })!.toHexString(),
-            //            ).toBe('#ffffff');
-            //});
-             
+            Assert.IsTrue(ReadabilityHelpers.MostReadable(TinyColor.ParseFromHex("#000"), 
+                new List<TinyColor>{ TinyColor.ParseFromHex("#111"), TinyColor.ParseFromHex("#222")})
+                .ToHex6String() == "#222222");
+            Assert.IsTrue(ReadabilityHelpers.MostReadable(TinyColor.ParseFromHex("#f00"),
+                new List<TinyColor> { TinyColor.ParseFromHex("#d00"), TinyColor.ParseFromHex("#0d0") })
+                .ToHex6String() == "#00DD00");
+            Assert.IsTrue(ReadabilityHelpers.MostReadable(TinyColor.ParseFromHex("#fff"),
+                new List<TinyColor> { TinyColor.ParseFromHex("#fff"), TinyColor.ParseFromHex("#fff") })
+                .ToHex6String() == "#FFFFFF");
+            Assert.IsTrue(ReadabilityHelpers.MostReadable(TinyColor.ParseFromHex("#fff"),
+                new List<TinyColor> { TinyColor.ParseFromHex("#fff"), TinyColor.ParseFromHex("#fff")}, true)
+                .ToHex6String() == "#000000");
+            Assert.IsTrue(ReadabilityHelpers.MostReadable(TinyColor.ParseFromHex("#123"),
+                new List<TinyColor> { TinyColor.ParseFromHex("#124"), TinyColor.ParseFromHex("#125") }, false)
+                .ToHex6String() == "#112255");
+            Assert.IsTrue(ReadabilityHelpers.MostReadable(TinyColor.ParseFromHex("#123"),
+                new List<TinyColor> { TinyColor.ParseFromHex("#000"), TinyColor.ParseFromHex("#fff") }, false)
+                .ToHex6String() == "#FFFFFF");
+            Assert.IsTrue(ReadabilityHelpers.MostReadable(TinyColor.ParseFromHex("#123"),
+                new List<TinyColor> { TinyColor.ParseFromHex("#124"), TinyColor.ParseFromHex("#125") }, true)
+                .ToHex6String() == "#FFFFFF");
+            Assert.IsTrue(ReadabilityHelpers.MostReadable(TinyColor.ParseFromHex("#ff0088"),
+                new List<TinyColor> { TinyColor.ParseFromHex("#000"), TinyColor.ParseFromHex("#fff") }, false)
+                .ToHex6String() == "#000000");
+            Assert.IsTrue(ReadabilityHelpers.MostReadable(TinyColor.ParseFromHex("#ff0088"),
+                new List<TinyColor> { TinyColor.ParseFromHex("#2e0c3a") }, true, ReadabilityHelpers.WCAGLevel.AAA, ReadabilityHelpers.WCAGSize.Large)
+                .ToHex6String() == "#2E0C3A");
+            Assert.IsTrue(ReadabilityHelpers.MostReadable(TinyColor.ParseFromHex("#ff0088"),
+                new List<TinyColor> { TinyColor.ParseFromHex("#2e0c3a") }, true, ReadabilityHelpers.WCAGLevel.AAA, ReadabilityHelpers.WCAGSize.Small)
+                .ToHex6String() == "#000000");
+            Assert.IsTrue(ReadabilityHelpers.MostReadable(TinyColor.ParseFromHex("#371b2c"),
+                new List<TinyColor> { TinyColor.ParseFromHex("#000"), TinyColor.ParseFromHex("#fff") }, false)
+                .ToHex6String() == "#FFFFFF");
+            Assert.IsTrue(ReadabilityHelpers.MostReadable(TinyColor.ParseFromHex("#371b2c"),
+                new List<TinyColor> { TinyColor.ParseFromHex("#a9acb6") }, true, ReadabilityHelpers.WCAGLevel.AAA, ReadabilityHelpers.WCAGSize.Large)
+                .ToHex6String() == "#A9ACB6");
+            Assert.IsTrue(ReadabilityHelpers.MostReadable(TinyColor.ParseFromHex("#371b2c"),
+                new List<TinyColor> { TinyColor.ParseFromHex("#a9acb6") }, true, ReadabilityHelpers.WCAGLevel.AAA, ReadabilityHelpers.WCAGSize.Small)
+                .ToHex6String() == "#FFFFFF");
         }
 
         [Test]
