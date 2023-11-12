@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using NUnit.Framework;
+using UnityEditor;
 using UnityEngine;
 
 namespace TinyColor
@@ -12,115 +13,116 @@ namespace TinyColor
 
         private static readonly string[] DESATURATIONS =
         {
-            "ff0000", "fe0101", "fc0303", "fb0404", "fa0505", "f90606", "f70808", "f60909", "f50a0a", "f40b0b",
-            "f20d0d", "f10e0e", "f00f0f", "ee1111", "ed1212", "ec1313", "eb1414", "e91616", "e81717", "e71818",
-            "e61919", "e41b1b", "e31c1c", "e21d1d", "e01f1f", "df2020", "de2121", "dd2222", "db2424", "da2525",
-            "d92626", "d72828", "d62929", "d52a2a", "d42b2b", "d22d2d", "d12e2e", "d02f2f", "cf3030", "cd3232",
-            "cc3333", "cb3434", "c93636", "c83737", "c73838", "c63939", "c43b3b", "c33c3c", "c23d3d", "c13e3e",
-            "bf4040", "be4141", "bd4242", "bb4444", "ba4545", "b94646", "b84747", "b64949", "b54a4a", "b44b4b",
-            "b34d4d", "b14e4e", "b04f4f", "af5050", "ad5252", "ac5353", "ab5454", "aa5555", "a85757", "a75858",
-            "a65959", "a45b5b", "a35c5c", "a25d5d", "a15e5e", "9f6060", "9e6161", "9d6262", "9c6363", "9a6565",
-            "996666", "986767", "966969", "956a6a", "946b6b", "936c6c", "916e6e", "906f6f", "8f7070", "8e7171",
-            "8c7373", "8b7474", "8a7575", "887777", "877878", "867979", "857a7a", "837c7c", "827d7d", "817e7e",
-            "808080"
+            "#FF0000", "#FE0101", "#FC0303", "#FB0404", "#FA0505", "#F90606", "#F70808", "#F60909", "#F50A0A", "#F40B0B",
+            "#F20D0D", "#F10E0E", "#F00F0F", "#EE1111", "#ED1212", "#EC1313", "#EB1414", "#E91616", "#E81717", "#E71818",
+            "#E61A1A", "#E41B1B", "#E31C1C", "#E21D1D", "#E01F1F", "#DF2020", "#DE2121", "#DD2222", "#DB2424", "#DA2525",
+            "#D92626", "#D72828", "#D62929", "#D52A2A", "#D42B2B", "#D22D2D", "#D12E2E", "#D02F2F", "#CF3030", "#CD3232",
+            "#CC3333", "#CB3434", "#C93636", "#C83737", "#C73838", "#C63939", "#C43B3B", "#C33C3C", "#C23D3D", "#C13E3E",
+            "#BF4040", "#BE4141", "#BD4242", "#BB4444", "#BA4545", "#B94646", "#B84747", "#B64949", "#B54A4A", "#B44B4B",
+            "#B24C4D", "#B14E4E", "#B04F4F", "#AF5050", "#AD5252", "#AC5353", "#AB5454", "#AA5555", "#A85757", "#A75858",
+            "#A65959", "#A45B5B", "#A35C5C", "#A25D5D", "#A15E5E", "#9F6060", "#9E6161", "#9D6262", "#9C6363", "#9A6565",
+            "#996666", "#986767", "#966969", "#956A6A", "#946B6B", "#936C6C", "#916E6E", "#906F6F", "#8F7070", "#8E7171",
+            "#8C7373", "#8B7474", "#8A7575", "#887777", "#877878", "#867979", "#857A7A", "#837C7C", "#827D7D", "#817E7E",
+            "#808080"
         };
 
         private static readonly string[] SATURATIONS =
         {
-            "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000",
-            "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000",
-            "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000",
-            "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000",
-            "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000",
-            "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000",
-            "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000",
-            "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000",
-            "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000",
-            "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000",
-            "ff0000", "ff0000", "ff0000", "ff0000", "ff0000", "ff0000"
+            "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000",
+            "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000",
+            "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000",
+            "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000",
+            "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000",
+            "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000",
+            "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000",
+            "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000",
+            "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000",
+            "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000",
+            "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000"
         };
 
         private static readonly string[] LIGHTENS =
         {
-            "ff0000", "ff0505", "ff0a0a", "ff0f0f", "ff1414", "ff1a1a", "ff1f1f", "ff2424",
-            "ff2929", "ff2e2e", "ff3333", "ff3838", "ff3d3d", "ff4242", "ff4747", "ff4d4d",
-            "ff5252", "ff5757", "ff5c5c", "ff6161", "ff6666", "ff6b6b", "ff7070", "ff7575",
-            "ff7a7a", "ff8080", "ff8585", "ff8a8a", "ff8f8f", "ff9494", "ff9999", "ff9e9e",
-            "ffa3a3", "ffa8a8", "ffadad", "ffb3b3", "ffb8b8", "ffbdbd", "ffc2c2", "ffc7c7",
-            "ffcccc", "ffd1d1", "ffd6d6", "ffdbdb", "ffe0e0", "ffe5e5", "ffebeb", "fff0f0",
-            "fff5f5", "fffafa", "ffffff", "ffffff", "ffffff", "ffffff", "ffffff", "ffffff",
-            "ffffff", "ffffff", "ffffff", "ffffff", "ffffff", "ffffff", "ffffff", "ffffff",
-            "ffffff", "ffffff", "ffffff", "ffffff", "ffffff", "ffffff", "ffffff", "ffffff",
-            "ffffff", "ffffff", "ffffff", "ffffff", "ffffff", "ffffff", "ffffff", "ffffff",
-            "ffffff", "ffffff", "ffffff", "ffffff", "ffffff", "ffffff", "ffffff", "ffffff",
-            "ffffff", "ffffff", "ffffff", "ffffff", "ffffff", "ffffff", "ffffff", "ffffff"
+            "#FF0000", "#FF0505", "#FF0A0A", "#FF0F0F", "#FF1414", "#FF1A1A", "#FF1F1F", "#FF2424",
+            "#FF2929", "#FF2E2E", "#FF3333", "#FF3838", "#FF3D3D", "#FF4242", "#FF4747", "#FF4C4D",
+            "#FF5252", "#FF5757", "#FF5C5C", "#FF6161", "#FF6666", "#FF6B6B", "#FF7070", "#FF7575",
+            "#FF7A7A", "#FF8080", "#FF8585", "#FF8A8A", "#FF8F8F", "#FF9494", "#FF9999", "#FF9E9E",
+            "#FFA3A3", "#FFA8A8", "#FFADAD", "#FFB3B3", "#FFB8B8", "#FFBDBD", "#FFC2C2", "#FFC7C7",
+            "#FFCCCC", "#FFD1D1", "#FFD6D6", "#FFDBDB", "#FFE0E0", "#FFE6E6", "#FFEBEB", "#FFF0F0",
+            "#FFF5F5", "#FFFAFA", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF",
+            "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF",
+            "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF",
+            "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF",
+            "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF",
+            "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF",
+            "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"
         };
 
         private static readonly string[] BRIGHTENS =
         {
-            "ff0000", "ff0303", "ff0505", "ff0808", "ff0a0a", "ff0d0d", "ff0f0f", "ff1212",
-            "ff1414", "ff1717", "ff1919", "ff1c1c", "ff1f1f", "ff2121", "ff2424", "ff2626",
-            "ff2929", "ff2b2b", "ff2e2e", "ff3030", "ff3333", "ff3636", "ff3838", "ff3b3b",
-            "ff3d3d", "ff4040", "ff4242", "ff4545", "ff4747", "ff4a4a", "ff4c4c", "ff4f4f",
-            "ff5252", "ff5454", "ff5757", "ff5959", "ff5c5c", "ff5e5e", "ff6161", "ff6363",
-            "ff6666", "ff6969", "ff6b6b", "ff6e6e", "ff7070", "ff7373", "ff7575", "ff7878",
-            "ff7a7a", "ff7d7d", "ff7f7f", "ff8282", "ff8585", "ff8787", "ff8a8a", "ff8c8c",
-            "ff8f8f", "ff9191", "ff9494", "ff9696", "ff9999", "ff9c9c", "ff9e9e", "ffa1a1",
-            "ffa3a3", "ffa6a6", "ffa8a8", "ffabab", "ffadad", "ffb0b0", "ffb2b2", "ffb5b5",
-            "ffb8b8", "ffbaba", "ffbdbd", "ffbfbf", "ffc2c2", "ffc4c4", "ffc7c7", "ffc9c9",
-            "ffcccc", "ffcfcf", "ffd1d1", "ffd4d4", "ffd6d6", "ffd9d9", "ffdbdb", "ffdede",
-            "ffe0e0", "ffe3e3", "ffe5e5", "ffe8e8", "ffebeb", "ffeded", "fff0f0", "fff2f2",
-            "fff5f5", "fff7f7", "fffafa", "fffcfc", "ffffff"
+            "#FF0000", "#FF0303", "#FF0505", "#FF0808", "#FF0A0A", "#FF0D0D", "#FF0F0F", "#FF1212",
+            "#FF1414", "#FF1717", "#FF1A1A", "#FF1C1C", "#FF1F1F", "#FF2121", "#FF2424", "#FF2626",
+            "#FF2929", "#FF2B2B", "#FF2E2E", "#FF3030", "#FF3333", "#FF3636", "#FF3838", "#FF3B3B",
+            "#FF3D3D", "#FF4040", "#FF4242", "#FF4545", "#FF4747", "#FF4A4A", "#FF4C4C", "#FF4F4F",
+            "#FF5252", "#FF5454", "#FF5757", "#FF5959", "#FF5C5C", "#FF5E5E", "#FF6161", "#FF6363",
+            "#FF6666", "#FF6969", "#FF6B6B", "#FF6E6E", "#FF7070", "#FF7373", "#FF7575", "#FF7878",
+            "#FF7A7A", "#FF7D7D", "#FF8080", "#FF8282", "#FF8585", "#FF8787", "#FF8A8A", "#FF8C8C",
+            "#FF8F8F", "#FF9191", "#FF9494", "#FF9696", "#FF9999", "#FF9C9C", "#FF9E9E", "#FFA1A1",
+            "#FFA3A3", "#FFA6A6", "#FFA8A8", "#FFABAB", "#FFADAD", "#FFB0B0", "#FFB2B2", "#FFB5B5",
+            "#FFB8B8", "#FFBABA", "#FFBDBD", "#FFBFBF", "#FFC2C2", "#FFC4C4", "#FFC7C7", "#FFC9C9",
+            "#FFCCCC", "#FFCFCF", "#FFD1D1", "#FFD4D4", "#FFD6D6", "#FFD9D9", "#FFDBDB", "#FFDEDE",
+            "#FFE0E0", "#FFE3E3", "#FFE6E6", "#FFE8E8", "#FFEBEB", "#FFEDED", "#FFF0F0", "#FFF2F2",
+            "#FFF5F5", "#FFF7F7", "#FFFAFA", "#FFFCFC", "#FFFFFF"
         };
 
         private static readonly string[] DARKENS =
         {
-            "ff0000", "fa0000", "f50000", "f00000", "eb0000", "e60000", "e00000", "db0000",
-            "d60000", "d10000", "cc0000", "c70000", "c20000", "bd0000", "b80000", "b30000",
-            "ad0000", "a80000", "a30000", "9e0000", "990000", "940000", "8f0000", "8a0000",
-            "850000", "800000", "7a0000", "750000", "700000", "6b0000", "660000", "610000",
-            "5c0000", "570000", "520000", "4d0000", "470000", "420000", "3d0000", "380000",
-            "330000", "2e0000", "290000", "240000", "1f0000", "190000", "140000", "0f0000",
-            "0a0000", "050000", "000000", "000000", "000000", "000000", "000000", "000000",
-            "000000", "000000", "000000", "000000", "000000", "000000", "000000", "000000",
-            "000000", "000000", "000000", "000000", "000000", "000000", "000000", "000000",
-            "000000", "000000", "000000", "000000", "000000", "000000", "000000", "000000",
-            "000000", "000000", "000000", "000000", "000000", "000000", "000000", "000000",
-            "000000", "000000", "000000", "000000", "000000", "000000", "000000", "000000",
+            "#FF0000", "#FA0000", "#F50000", "#F00000", "#EB0000", "#E60000", "#E00000", "#DB0000",
+            "#D60000", "#D10000", "#CC0000", "#C70000", "#C20000", "#BD0000", "#B80000", "#B20000",
+            "#AD0000", "#A80000", "#A30000", "#9E0000", "#990000", "#940000", "#8F0000", "#8A0000",
+            "#850000", "#800000", "#7A0000", "#750000", "#700000", "#6B0000", "#660000", "#610000",
+            "#5C0000", "#570000", "#520000", "#4C0000", "#470000", "#420000", "#3D0000", "#380000",
+            "#330000", "#2E0000", "#290000", "#240000", "#1F0000", "#1A0000", "#140000", "#0F0000",
+            "#0A0000", "#050000", "#000000", "#000000", "#000000", "#000000", "#000000", "#000000",
+            "#000000", "#000000", "#000000", "#000000", "#000000", "#000000", "#000000", "#000000",
+            "#000000", "#000000", "#000000", "#000000", "#000000", "#000000", "#000000", "#000000",
+            "#000000", "#000000", "#000000", "#000000", "#000000", "#000000", "#000000", "#000000",
+            "#000000", "#000000", "#000000", "#000000", "#000000", "#000000", "#000000", "#000000",
+            "#000000", "#000000", "#000000", "#000000", "#000000", "#000000", "#000000", "#000000",
         };
 
         private static readonly string[] TINTS =
         {
-            "ff0000", "ff0303", "ff0505", "ff0808", "ff0a0a", "ff0d0d", "ff0f0f", "ff1212",
-            "ff1414", "ff1717", "ff1a1a", "ff1c1c", "ff1f1f", "ff2121", "ff2424", "ff2626",
-            "ff2929", "ff2b2b", "ff2e2e", "ff3030", "ff3333", "ff3636", "ff3838", "ff3b3b",
-            "ff3d3d", "ff4040", "ff4242", "ff4545", "ff4747", "ff4a4a", "ff4d4d", "ff4f4f",
-            "ff5252", "ff5454", "ff5757", "ff5959", "ff5c5c", "ff5e5e", "ff6161", "ff6363",
-            "ff6666", "ff6969", "ff6b6b", "ff6e6e", "ff7070", "ff7373", "ff7575", "ff7878",
-            "ff7a7a", "ff7d7d", "ff8080", "ff8282", "ff8585", "ff8787", "ff8a8a", "ff8c8c",
-            "ff8f8f", "ff9191", "ff9494", "ff9696", "ff9999", "ff9c9c", "ff9e9e", "ffa1a1",
-            "ffa3a3", "ffa6a6", "ffa8a8", "ffabab", "ffadad", "ffb0b0", "ffb3b3", "ffb5b5",
-            "ffb8b8", "ffbabab", "ffbdbd", "ffbfbf", "ffc2c2", "ffc4c4", "ffc7c7", "ffc9c9",
-            "ffcccc", "ffcfcf", "ffd1d1", "ffd4d4", "ffd6d6", "ffd9d9", "ffdbdb", "ffdede",
-            "ffe0e0", "ffe3e3", "ffe6e6", "ffe8e8", "ffebeb", "ffeded", "fff0f0", "fff2f2",
-            "fff5f5", "fff7f7", "fffafa", "fffcfc", "ffffff"
+            "#FF0000", "#FF0303", "#FF0505", "#FF0808", "#FF0A0A", "#FF0D0D", "#FF0F0F", "#FF1212",
+            "#FF1414", "#FF1717", "#FF1A1A", "#FF1C1C", "#FF1F1F", "#FF2121", "#FF2424", "#FF2626",
+            "#FF2929", "#FF2B2B", "#FF2E2E", "#FF3030", "#FF3333", "#FF3636", "#FF3838", "#FF3B3B",
+            "#FF3D3D", "#FF4040", "#FF4242", "#FF4545", "#FF4747", "#FF4A4A", "#FF4C4C", "#FF4F4F",
+            "#FF5252", "#FF5454", "#FF5757", "#FF5959", "#FF5C5C", "#FF5E5E", "#FF6161", "#FF6363",
+            "#FF6666", "#FF6969", "#FF6B6B", "#FF6E6E", "#FF7070", "#FF7373", "#FF7575", "#FF7878",
+            "#FF7A7A", "#FF7D7D", "#FF8080", "#FF8282", "#FF8585", "#FF8787", "#FF8A8A", "#FF8C8C",
+            "#FF8F8F", "#FF9191", "#FF9494", "#FF9696", "#FF9999", "#FF9C9C", "#FF9E9E", "#FFA1A1",
+            "#FFA3A3", "#FFA6A6", "#FFA8A8", "#FFABAB", "#FFADAD", "#FFB0B0", "#FFB2B2", "#FFB5B5",
+            "#FFB8B8", "#FFBABA", "#FFBDBD", "#FFBFBF", "#FFC2C2", "#FFC4C4", "#FFC7C7", "#FFC9C9",
+            "#FFCCCC", "#FFCFCF", "#FFD1D1", "#FFD4D4", "#FFD6D6", "#FFD9D9", "#FFDBDB", "#FFDEDE",
+            "#FFE0E0", "#FFE3E3", "#FFE6E6", "#FFE8E8", "#FFEBEB", "#FFEDED", "#FFF0F0", "#FFF2F2",
+            "#FFF5F5", "#FFF7F7", "#FFFAFA", "#FFFCFC", "#FFFFFF"
         };
 
         private static readonly string[] SHADES =
         {
-            "ff0000", "fc0000", "fa0000", "f70000", "f50000", "f20000", "f00000", "ed0000",
-            "eb0000", "e80000", "e60000", "e30000", "e00000", "de0000", "db0000", "d90000",
-            "d60000", "d40000", "d10000", "cf0000", "cc0000", "c90000", "c70000", "c40000",
-            "c20000", "bf0000", "bd0000", "ba0000", "b80000", "b50000", "b30000", "b00000",
-            "ad0000", "ab0000", "a80000", "a60000", "a30000", "a10000", "9e0000", "9c0000",
-            "990000", "960000", "940000", "910000", "8f0000", "8c0000", "8a0000", "870000",
-            "850000", "820000", "800000", "7d0000", "7a0000", "780000", "750000", "730000",
-            "700000", "6e0000", "6b0000", "690000", "660000", "630000", "610000", "5e0000",
-            "5c0000", "590000", "570000", "540000", "520000", "4f0000", "4d0000", "4a0000",
-            "470000", "450000", "420000", "400000", "3d0000", "3b0000", "380000", "360000",
-            "330000", "300000", "2e0000", "2b0000", "290000", "260000", "240000", "210000",
-            "1f0000", "1c0000", "1a0000", "170000", "140000", "120000", "0f0000", "0d0000",
-            "0a0000", "080000", "050000", "030000", "000000"
+            "#FF0000", "#FC0000", "#FA0000", "#F70000", "#F50000", "#F20000", "#F00000", "#ED0000",
+            "#EB0000", "#E80000", "#E60000", "#E30000", "#E00000", "#DE0000", "#DB0000", "#D90000",
+            "#D60000", "#D40000", "#D10000", "#CF0000", "#CC0000", "#C90000", "#C70000", "#C40000",
+            "#C20000", "#BF0000", "#BD0000", "#BA0000", "#B80000", "#B50000", "#B20000", "#B00000",
+            "#AD0000", "#AB0000", "#A80000", "#A60000", "#A30000", "#A10000", "#9E0000", "#9C0000",
+            "#990000", "#960000", "#940000", "#910000", "#8F0000", "#8C0000", "#8A0000", "#870000",
+            "#850000", "#820000", "#800000", "#7D0000", "#7A0000", "#780000", "#750000", "#730000",
+            "#700000", "#6E0000", "#6B0000", "#690000", "#660000", "#630000", "#610000", "#5E0000",
+            "#5C0000", "#590000", "#570000", "#540000", "#520000", "#4F0000", "#4C0000", "#4A0000",
+            "#470000", "#450000", "#420000", "#400000", "#3D0000", "#3B0000", "#380000", "#360000",
+            "#330000", "#300000", "#2E0000", "#2B0000", "#290000", "#260000", "#240000", "#210000",
+            "#1F0000", "#1C0000", "#1A0000", "#170000", "#140000", "#120000", "#0F0000", "#0D0000",
+            "#0A0000", "#080000", "#050000", "#030000", "#000000"
         };
 
         #endregion
@@ -129,19 +131,12 @@ namespace TinyColor
         [Test]
         public void ConstructByName()
         {
-            Assert.AreEqual("red",
-                new TinyColor("red").ToName()); // create by name and then internally convert to name again
-            Assert.AreEqual("blue",
-                new TinyColor("blue").ToName()); // create by name and then internally convert to name again
-            Assert.AreEqual("green",
-                new TinyColor("green").ToName()); // create by name and then internally convert to name again
-
-            Assert.AreEqual("white",
-                new TinyColor("qqqqqqq").ToName()); // create by name and then internally convert to name again
-            Assert.AreEqual("white",
-                new TinyColor("aaaaaaa").ToName()); // create by name and then internally convert to name again
-            Assert.AreEqual("white",
-                new TinyColor(string.Empty).ToName()); // create by name and then internally convert to name again
+            Assert.AreEqual("red", new TinyColor("red").ToName()); // create by name and then internally convert to name again
+            Assert.AreEqual("blue", new TinyColor("blue").ToName()); // create by name and then internally convert to name again
+            Assert.AreEqual("green", new TinyColor("green").ToName()); // create by name and then internally convert to name again
+            Assert.AreEqual("white", new TinyColor("qqqqqqq").ToName()); // create by name and then internally convert to name again
+            Assert.AreEqual("white", new TinyColor("aaaaaaa").ToName()); // create by name and then internally convert to name again
+            Assert.AreEqual("white", new TinyColor(string.Empty).ToName()); // create by name and then internally convert to name again
         }
 
         [Test]
@@ -499,83 +494,32 @@ namespace TinyColor
                 .ToHex6String() == "#FFFFFF");
         }
 
-        [Test]
-        public void ToMsFilter()
-        {
-            //*it('should create microsoft filter', () =>
-            //{
-            //    expect(toMsFilter('red')).toBe(
-            //      'progid:DXImageTransform.Microsoft.gradient(startColorstr=#ffff0000,endColorstr=#ffff0000)',
-
-            //    );
-            //    expect(toMsFilter('red', 'blue')).toBe(
-            //      'progid:DXImageTransform.Microsoft.gradient(startColorstr=#ffff0000,endColorstr=#ff0000ff)',
-
-            //    );
-
-            //    expect(toMsFilter('transparent')).toBe(
-            //      'progid:DXImageTransform.Microsoft.gradient(startColorstr=#00000000,endColorstr=#00000000)',
-
-            //    );
-            //    expect(toMsFilter('transparent', 'red')).toBe(
-            //      'progid:DXImageTransform.Microsoft.gradient(startColorstr=#00000000,endColorstr=#ffff0000)',
-
-            //    );
-
-            //    expect(toMsFilter('#f0f0f0dd')).toBe(
-            //      'progid:DXImageTransform.Microsoft.gradient(startColorstr=#ddf0f0f0,endColorstr=#ddf0f0f0)',
-
-            //    );
-            //    expect(toMsFilter('rgba(0, 0, 255, .5')).toBe(
-            //      'progid:DXImageTransform.Microsoft.gradient(startColorstr=#800000ff,endColorstr=#800000ff)',
-
-            //    );
-            //});
-        }
 
         [Test]
         public void Modification()
         {
+            for (var i = 0; i <= 100; i++)
+                Assert.IsTrue(TinyColor.ParseFromName("red").Desaturate(i / 100f).ToHex6String() == DESATURATIONS[i]);
 
-            //it('Modifications', () =>
-            //{
-            //    for (let i = 0; i <= 100; i++)
-            //    {
-            //        expect(new TinyColor('red').desaturate(i).toHex()).toBe(DESATURATIONS[i]);
-            //    }
+            for (var i = 0; i <= 100; i++)
+                Assert.IsTrue(TinyColor.ParseFromName("red").Saturate(i / 100f).ToHex6String() == SATURATIONS[i]);
 
-            //    for (let i = 0; i <= 100; i++)
-            //    {
-            //        expect(new TinyColor('red').saturate(i).toHex()).toBe(SATURATIONS[i]);
-            //    }
+            for (var i = 0; i <= 100; i++)
+                Assert.IsTrue(TinyColor.ParseFromName("red").Lighten(i / 100f).ToHex6String() == LIGHTENS[i]);
 
-            //    for (let i = 0; i <= 100; i++)
-            //    {
-            //        expect(new TinyColor('red').lighten(i).toHex()).toBe(LIGHTENS[i]);
-            //    }
+            for (var i = 0; i <= 100; i++)
+                Assert.IsTrue(TinyColor.ParseFromName("red").Brighten(i / 100f).ToHex6String() == BRIGHTENS[i]);
 
-            //    for (let i = 0; i <= 100; i++)
-            //    {
-            //        expect(new TinyColor('red').brighten(i).toHex()).toBe(BRIGHTENS[i]);
-            //    }
+            for (var i = 0; i <= 95; i++)
+                Assert.IsTrue(TinyColor.ParseFromName("red").Darken(i / 100f).ToHex6String() == DARKENS[i]);
 
-            //    for (let i = 0; i <= 100; i++)
-            //    {
-            //        expect(new TinyColor('red').darken(i).toHex()).toBe(DARKENS[i]);
-            //    }
+            for (var i = 0; i <= 100; i++)
+                Assert.IsTrue(TinyColor.ParseFromName("red").Tint(i / 100f).ToHex6String() == TINTS[i]);
 
-            //    for (let i = 0; i <= 100; i++)
-            //    {
-            //        expect(new TinyColor('red').tint(i).toHex()).toBe(TINTS[i]);
-            //    }
+            for (var i = 0; i <= 100; i++)
+                Assert.IsTrue(TinyColor.ParseFromName("red").Shade(i / 100f).ToHex6String() == SHADES[i]);
 
-            //    for (let i = 0; i <= 100; i++)
-            //    {
-            //        expect(new TinyColor('red').shade(i).toHex()).toBe(SHADES[i]);
-            //    }
-
-            //    expect(new TinyColor('red').greyscale().toHex()).toBe('808080');
-            //});
+            Assert.IsTrue(TinyColor.ParseFromName("red").Greyscale().ToHex6String() == "#808080");
         }
 
         [Test]
@@ -599,7 +543,6 @@ namespace TinyColor
             //        });
             //    });
             //});
-
         }
 
         [Test]
