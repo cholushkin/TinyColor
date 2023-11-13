@@ -43,6 +43,16 @@ namespace TinyColor
         {
             return c.Length == 1 ? "0" + c : c;
         }
+
+        public static float NormalizeAngle(float angle)
+        {
+	        angle = angle % 360; // Ensure angle is within a full circle
+	        if (angle < 0)
+		        angle += 360; // Make sure the angle is positive
+	        if (Mathf.Approximately(angle, 360f))
+		        angle = 0f;
+	        return angle;
+        }
     }
 
 }

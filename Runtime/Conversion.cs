@@ -122,7 +122,7 @@ namespace TinyColor
 
                 h /= 6f;
             }
-            return new HSL(h * 360f, s, l);
+            return new HSL(ColorUtils.NormalizeAngle(h * 360f), s, l);
         }
 
 
@@ -161,7 +161,7 @@ namespace TinyColor
                 h /= 6;
             }
 
-            return new HSV(h * 360f, s, v);
+            return new HSV(ColorUtils.NormalizeAngle( h * 360f), s, v);
         }
     }
 }

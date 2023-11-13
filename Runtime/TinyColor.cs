@@ -276,13 +276,6 @@ namespace TinyColor
             B = tinyColor.B;
             A = tinyColor.A;
         }
-
-        public TinyColor(string colorName) :
-            this(Color.Colors.GetValueOrDefault(colorName.ToLower()))
-        {
-        }
-
-
         #endregion
 
 
@@ -512,14 +505,14 @@ namespace TinyColor
             var hsv = ToHSV();
             var h = hsv.H;
             var s = hsv.S;
-            var v = hsv.V;
+            double v = hsv.V;
             var res = new List<TinyColor>();
 
-            float modification = 1f / results;
+            double modification = 1f / results;
 
             while (results-- > 0)
             {
-                res.Add(new TinyColor(new HSV(h, s, v)));
+                res.Add(new TinyColor(new HSV(h, s, (float)v)));
                 v = (v + modification) % 1f;
             }
 
@@ -574,13 +567,13 @@ namespace TinyColor
         public List<TinyColor> Polyad(int n)
         {
             var hsl = ToHSL();
-            var h = hsl.H;
+            double h = hsl.H;
 
             var result = new List<TinyColor> { this };
-            var increment = 360f / n;
+            double increment = 360.0 / n;
 
             for (int i = 1; i < n; i++)
-                result.Add(new TinyColor(new HSL((h + i * increment) % 360f, hsl.S, hsl.L)));
+                result.Add(new TinyColor(new HSL((float)((h + i * increment) % 360.0), hsl.S, hsl.L)));
 
             return result;
         }
