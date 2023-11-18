@@ -806,14 +806,18 @@ namespace TinyColor
         }
 
 
-        public string ToHex8String()
+        public string ToHex8String(bool cutSharpSymbol = false)
         {
+            if (cutSharpSymbol)
+                return ColorUtility.ToHtmlStringRGBA(ToColor());
             return "#" + ColorUtility.ToHtmlStringRGBA(ToColor());
         }
 
 
-        public string ToHex6String()
+        public string ToHex6String(bool cutSharpSymbol = false)
         {
+            if (cutSharpSymbol)
+                return ColorUtility.ToHtmlStringRGB(ToColor());
             return "#" + ColorUtility.ToHtmlStringRGB(ToColor());
         }
 
