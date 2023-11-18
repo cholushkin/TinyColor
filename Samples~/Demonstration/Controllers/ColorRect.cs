@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using TinyColor;
+using TinyColorLib;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,8 +9,8 @@ public class ColorRect : MonoBehaviour, IPointerClickHandler
 {
     public Image Image;
     public TextMeshProUGUI Text;
-    public TinyColor.TinyColor TColor;
-    private static List<TinyColor.TinyColor> _textColors = new List<TinyColor.TinyColor> { TinyColor.TinyColor.ParseFromName("white"), TinyColor.TinyColor.ParseFromName("black") };
+    public TinyColor TColor;
+    private static List<TinyColor> _textColors = new List<TinyColor>{ TinyColor.ParseFromName("white"), TinyColor.ParseFromName("black") };
 
 
     public void OnPointerClick(PointerEventData eventData)
@@ -19,7 +19,7 @@ public class ColorRect : MonoBehaviour, IPointerClickHandler
     }
 
 
-    public void SetColor(TinyColor.TinyColor tColor)
+    public void SetColor(TinyColor tColor)
     {
         Image.color = tColor.ToColor();
         TColor = tColor;

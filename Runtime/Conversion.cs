@@ -1,8 +1,6 @@
-using System;
 using UnityEngine;
-using static TinyColor.TinyColor;
 
-namespace TinyColor
+namespace TinyColorLib
 {
     public static class Conversion
     {
@@ -34,7 +32,7 @@ namespace TinyColor
         // It ranges from 0 (a shade of gray) to 1.0 (full saturation).
         // Lightness(L) : Also represented as a percentage, it determines how much light is emitted or reflected by the color.
         // The range is 0 (black) to 1.0 (white), with 0.5 representing the pure color.
-        public static RGB HSLToRGB(float h, float s, float l)
+        public static TinyColor.RGB HSLToRGB(float h, float s, float l)
         {
             h = Mathf.Repeat(h, 360f) / 360f;
             s = Mathf.Clamp01(s);
@@ -55,11 +53,11 @@ namespace TinyColor
                 b = HueToRGB(p, q, h - 1f / 3f);
             }
 
-            return new RGB(r, g, b);
+            return new TinyColor.RGB(r, g, b);
         }
 
 
-        public static RGB HSVToRGB(float h, float s, float v)
+        public static TinyColor.RGB HSVToRGB(float h, float s, float v)
         {
             h = Mathf.Repeat(h, 360f) / 360f * 6;
             s = Mathf.Clamp01(s);
@@ -80,11 +78,11 @@ namespace TinyColor
             float g = colorComponentsG[mod];
             float b = colorComponentsB[mod];
 
-            return new RGB(r, g, b);
+            return new TinyColor.RGB(r, g, b);
         }
 
 
-        public static HSL RGBToHSL(float r, float g, float b)
+        public static TinyColor.HSL RGBToHSL(float r, float g, float b)
         {
             r = Mathf.Clamp01(r);
             g = Mathf.Clamp01(g);
@@ -122,11 +120,11 @@ namespace TinyColor
 
                 h /= 6f;
             }
-            return new HSL(ColorUtils.NormalizeAngle(h * 360f), s, l);
+            return new TinyColor.HSL(ColorUtils.NormalizeAngle(h * 360f), s, l);
         }
 
 
-        public static HSV RGBToHSV(float r, float g, float b)
+        public static TinyColor.HSV RGBToHSV(float r, float g, float b)
         {
             r = Mathf.Clamp01(r);
             g = Mathf.Clamp01(g);
@@ -161,7 +159,7 @@ namespace TinyColor
                 h /= 6;
             }
 
-            return new HSV(ColorUtils.NormalizeAngle( h * 360f), s, v);
+            return new TinyColor.HSV(ColorUtils.NormalizeAngle( h * 360f), s, v);
         }
     }
 }

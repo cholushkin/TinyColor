@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TinyColor
+namespace TinyColorLib
 {
     public static class ReadabilityHelpers
     {

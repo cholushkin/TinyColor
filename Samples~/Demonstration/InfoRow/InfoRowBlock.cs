@@ -1,4 +1,4 @@
-using TinyColor;
+using TinyColorLib;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;

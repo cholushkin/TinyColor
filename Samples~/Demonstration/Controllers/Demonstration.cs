@@ -1,10 +1,10 @@
 using UnityEngine;
 using TMPro;
-
+using TinyColorLib;
 
 public class Demonstration : MonoBehaviour
 {
-    public TinyColor.TinyColor Selection
+    public TinyColor Selection
     {
         get { return _selection; }
         set { SetColor(value); }
@@ -15,7 +15,7 @@ public class Demonstration : MonoBehaviour
     public ColorRect ColorPreview;
 
     public static Demonstration Instance;
-    private TinyColor.TinyColor _selection = new TinyColor.TinyColor(Color.black);
+    private TinyColor _selection = new TinyColor(UnityEngine.Color.black);
 
     
     private void Awake()
@@ -24,7 +24,7 @@ public class Demonstration : MonoBehaviour
     }
 
     
-    public void SetColor(TinyColor.TinyColor value)
+    public void SetColor(TinyColor value)
     {
         InputField.text = value.ToHex6String(true);
         _selection = value;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace TinyColor
+namespace TinyColorLib
 {
     public class TinyColor : ICloneable
     {

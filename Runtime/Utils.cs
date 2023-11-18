@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace TinyColor
+namespace TinyColorLib
 {
     public static class ColorUtils
     {

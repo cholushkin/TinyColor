@@ -1,6 +1,6 @@
 using System;
 
-namespace TinyColor
+namespace TinyColorLib
 {
     public static class TinyColorsUtils
     {

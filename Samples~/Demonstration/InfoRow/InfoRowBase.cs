@@ -1,9 +1,10 @@
+using TinyColorLib;
 using TMPro;
 using UnityEngine;
 using Image = UnityEngine.UI.Image;
 
 
-public class InfoRowBase : MonoBehaviour
+public abstract class InfoRowBase : MonoBehaviour
 {
     public TextMeshProUGUI CaptionText;
     public GameObject ColorRectPrefab;
@@ -25,28 +26,26 @@ public class InfoRowBase : MonoBehaviour
     
     public void Clear()
     {
-        SetCaptionColor(TinyColor.TinyColor.ParseFromName("black"));
+        SetCaptionColor(TinyColor.ParseFromName("black"));
         foreach (Transform t in Container.transform)
             Destroy(t.gameObject);
     }
 
     
-    public void SetCaptionColor(TinyColor.TinyColor color)
+    public void SetCaptionColor(TinyColor color)
     {
         if (Background != null)
             Background.color = color.ToColor();
     }
 
     
-    public void AddColor(TinyColor.TinyColor color, string text)
+    public void AddColor(TinyColor color, string text)
     {
         var clrRect = Instantiate(ColorRectPrefab, Container);
         clrRect.GetComponent<ColorRect>().SetColor(color);
         clrRect.GetComponent<ColorRect>().SetText(text);
     }
 
-    
-    public virtual void MakeLayout()
-    {
-    }
+
+    public abstract void MakeLayout();
 }

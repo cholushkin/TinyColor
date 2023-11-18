@@ -1,3 +1,4 @@
+using TinyColorLib;
 using TMPro;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ public class ColorUserInputProcessor : MonoBehaviour
 
     public void OnValueEnter()
     {
-        var clr = TinyColor.TinyColor.ParseFromHex("#"+InputField.text);
+        var clr = TinyColor.ParseFromHex("#"+InputField.text);
         if(clr != null )
         {
             Demonstration.Instance.SetColor(clr);

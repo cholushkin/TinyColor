@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace TinyColor
+namespace TinyColorLib
 {
     public static class Color
     {

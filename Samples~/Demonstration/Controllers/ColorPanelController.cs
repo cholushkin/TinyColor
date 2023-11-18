@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using TinyColor;
+using TinyColorLib;
 using UnityEngine;
 
 public class ColorPanelController : MonoBehaviour
@@ -11,9 +11,9 @@ public class ColorPanelController : MonoBehaviour
     void Start()
     {
         int index = 0;
-        List<TinyColor.TinyColor> textColors = new List<TinyColor.TinyColor>{ TinyColor.TinyColor.ParseFromName("white"), TinyColor.TinyColor.ParseFromName("black") };
+        List<TinyColor> textColors = new List<TinyColor>{ TinyColor.ParseFromName("white"), TinyColor.ParseFromName("black") };
 
-        foreach(var kv in TinyColor.Color.Colors)
+        foreach(var kv in TinyColorLib.Color.Colors)
         {
             var colorName = kv.Key;
             var color = kv.Value.ToColor();
