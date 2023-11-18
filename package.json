@@ -21,6 +21,11 @@
     },
     "samples": [
     {
+        "displayName": "Demonstration",
+        "description": "Demonstration application similar to https://bgrins.github.io/TinyColor/",
+        "path": "Samples~/Demonstration"
+    },
+    {
         "displayName": "PrintAllColors",
         "description": "Print all TinyColor colors to the log console",
         "path": "Samples~/ExamplePrintAllColors"
