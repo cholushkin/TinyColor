@@ -13,13 +13,13 @@ public class ExamplePrintAllColors : MonoBehaviour
         var colorProperties = typeof(TinyColor.Color).GetProperties(BindingFlags.Public | BindingFlags.Static);
 
         int counter = 0;
-        foreach (var property in colorProperties)
-        {
-            if (property.PropertyType != typeof(UnityEngine.Color))
-                continue;
 
-            UnityEngine.Color color = (UnityEngine.Color)property.GetValue(null, null);
-            Debug.Log($"{property.Name}");
+        foreach (var kv in TinyColor.Color.Colors)
+        {
+            var name = kv.Key;
+            var color = kv.Value;
+            var hex = color.ToHex6String(true);
+            Debug.Log($"{name}, hex = <color=#{hex}>#{hex} </color>");
             ++counter;
         }
         Debug.Log($"{counter} color names");
