@@ -1,4 +1,3 @@
-using System.Reflection;
 using UnityEngine;
 
 public class ExamplePrintAllColors : MonoBehaviour
@@ -10,11 +9,9 @@ public class ExamplePrintAllColors : MonoBehaviour
 
     void PrintAllColors()
     {
-        var colorProperties = typeof(TinyColor.Color).GetProperties(BindingFlags.Public | BindingFlags.Static);
-
         int counter = 0;
 
-        foreach (var kv in TinyColor.Color.Colors)
+        foreach (var kv in TinyColorLib.Color.Colors)
         {
             var name = kv.Key;
             var color = kv.Value;
