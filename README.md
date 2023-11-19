@@ -1,15 +1,17 @@
 # TinyColor Unity
 ![TinyColor Logo](Documentation~/tinycolor-medium-resolution-logo-transparent.png)
 
-TinyColor is a small, fast library for color manipulation and conversion in Unity. It allows many forms of input, while providing color conversions and other color utility functions. It has no dependencies.
+TinyColor Unity is a lightweight and efficient color manipulation and conversion library designed for use in Unity. This library is versatile, supporting various forms of input and providing essential color conversion functionalities and utility functions. Notably, it operates independently without any external dependencies.
 
-TinyColor Unity is a port of javascript [tinycolor2](https://github.com/bgrins/TinyColor) by [Brian Grinstead](https://github.com/bgrins). 
-Library is adopted for Unity users for gamedev. Original library has some features for parsing color from string and auto detect format of color which is simplified in this port because of it's not very important for gamedev use cases but more for an html code design.
+TinyColor Unity is an adaptation of the JavaScript library [tinycolor2](https://github.com/bgrins/TinyColor) by [Brian Grinstead](https://github.com/bgrins). 
+This port is tailored specifically for Unity users in the game development community. While retaining the core features of the original library, TinyColor Unity simplifies certain aspects, such as color parsing from strings and automatic detection of color formats. These adjustments aim to streamline the library for game development use cases, where such intricacies are typically less critical compared to web development scenarios.
 
-__DEMO__: * [Demonstration](Samples~/Demonstration/Readme.md)
+## Demo
+Feel free to explore the provided [demonstration](Samples~/Demonstration/Readme.md) for a more hands-on understanding of TinyColor Unity's capabilities.
 
 ## Install
-* Open the add menu in the Package Manager's toolbar. ![upm](Documentation~/upm-ui-giturl.png)
+ ![upm](Documentation~/upm-ui-giturl.png)
+* Open the add menu in the Package Manager's toolbar.
 * The options for adding packages appear. Add package from git URL button.
 * Select Add package from git URL from the add menu. A text box and an Add button appear.
 * Enter https://github.com/cholushkin/TinyColor.git in the text box and click Add.
@@ -17,11 +19,11 @@ __DEMO__: * [Demonstration](Samples~/Demonstration/Readme.md)
 
 ## Use
 
-Great source of usage examples are tests. Please take a look on these 2 files:
+For comprehensive usage examples, refer to the following test files:
 * [TinyColorConvertionsTest.cs](Tests/Runtime/TinyColorConvertionsTest.cs)
 * [TinyColorModificationsTest.cs](Tests/Runtime/TinyColorModificationsTest.cs)
 
-Example of constructing TinyColor object form a string "red" and converting it to a hex representation:
+Here's an example of constructing a TinyColor object from the string "red" and converting it to a hex representation:
 
 ```csharp
 string redHex = TinyColor.ParseFromName("red").ToHex6String(); // '#ff0000'
@@ -38,12 +40,11 @@ You can parse color from string using on of the following methods:
 * ParseFromHSV
 
 
+Both HSL and HSV representations necessitate values within the range of 0.0f to 1.0f for the saturation (S), lightness (L), and value (V) properties. The hue (H) property, in the case of HSL, can range from 0f to 360f.
 
-HSL and HSV both require either 0.0f-1.0f for the S/L/V properties. The H (hue) can have values between 0f-360f.
+For RGB input, parsing can be done using either a range of 0 to 255 (ParseFromRGB) or 0.0f to 1.0f (ParseFromRGB256).
 
-RGB input requires either 0-255 (ParseFromRGB) or 0.0f-1.0f (ParseFromRGB256).
-
-Here are some examples of parsing string input:
+Below are examples demonstrating the parsing of string input:
 
 ### Hex
 
@@ -177,7 +178,7 @@ var color1 = TinyColor.ParseFromRGB256("0 0 255 255").OnBackground(TinyColor.Par
 
 ### Convert to different color formats
 
-The following methods will return an object which you can use directly or convert to string.
+The methods listed below will yield an object that can be used directly or converted to a string.
 * ToColor
 * ToColor32
 * ToRGBA256
@@ -189,7 +190,6 @@ The following methods will return an object which you can use directly or conver
 * ToHSV
 * ToHSVA
 * ToNumber
-
 
 
 ```csharp
@@ -305,7 +305,7 @@ TinyColor.ParseFromHex("#f00").Spin(360).ToHex6String(); // "#ff0000"
 Mix the current color a given amount with another color, from 0 to 1. 0 means no mixing (return current color).
 
 ```csharp
-var color1 = TinyColor.ParseFromHex('#f0f");
+var color1 = TinyColor.ParseFromHex("#f0f");
 var color2 = TinyColor.ParseFromHex("#0f0");
 
 color1.Mix(color2).ToHex6String(); // #808080
