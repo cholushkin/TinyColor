@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -487,7 +488,7 @@ namespace TinyColorLib
                 hsl.H = (hsl.H + part) % 360;
                 ret.Add(new TinyColor(hsl));
             }
-
+            ret = ret.OrderByDescending(x => x.GetBrightness()).ToList();
             return ret;
         }
 
@@ -515,6 +516,8 @@ namespace TinyColorLib
                 res.Add(new TinyColor(new HSV(h, s, (float)v)));
                 v = (v + modification) % 1f;
             }
+
+            res = res.OrderByDescending(x => x.GetBrightness()).ToList();
 
             return res;
         }
