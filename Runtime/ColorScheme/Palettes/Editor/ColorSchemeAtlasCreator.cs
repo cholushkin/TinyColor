@@ -10,6 +10,7 @@ using Color = UnityEngine.Color;
 
 namespace GameLib.ColorScheme
 {
+#if UNITY_EDITOR
     [CreateAssetMenu(fileName = "ColorSchemeAtlasCreator", menuName = "GameLib/Color/ColorSchemeAtlasCreator", order = 1)]
     public class ColorSchemeAtlasCreator : ScriptableObject
     {
@@ -125,14 +126,33 @@ namespace GameLib.ColorScheme
             // Save the texture to the specified path
             byte[] bytes = texture.EncodeToPNG();
             File.WriteAllBytes(path, bytes);
-
-            AssetDatabase.Refresh();
+            
             ColorScheme.Atlas = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+            AssetDatabase.Refresh();
             Debug.Log("Texture generated at: " + path);
             Debug.Log($"Texture assigned to {ColorScheme.name}.Atlas");
+            
+            // Set the texture import settings
+            SetTextureImportSettings(path);
         }
 
         #region API
+        
+        private void SetTextureImportSettings(string path)
+        {
+            // Create a TextureImporter for the generated texture
+            TextureImporter textureImporter = AssetImporter.GetAtPath(path) as TextureImporter;
+
+            if (textureImporter != null)
+            {
+                // Set the import settings
+                textureImporter.textureType = TextureImporterType.Sprite;
+                textureImporter.spriteImportMode = SpriteImportMode.Single;
+
+                // Apply changes
+                AssetDatabase.ImportAsset(path);
+            }
+        }
 
         private bool DrawCell(Texture2D texture, int cellX, int cellY, Color color, Color bg)
         {
@@ -235,4 +255,5 @@ namespace GameLib.ColorScheme
 
         #endregion
     }
+#endif
 }

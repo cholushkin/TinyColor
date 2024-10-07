@@ -6,6 +6,7 @@ using UnityEngine.Assertions;
 
 namespace GameLib.ColorScheme
 {
+#if UNITY_EDITOR
 	[CreateAssetMenu(fileName = "TextureToColorSchemeCreator", menuName = "GameLib/Color/TextureToColorSchemeCreator", order = 1)]
 	public class TextureToColorSchemeCreator : ScriptableObject
 	{
@@ -37,6 +38,7 @@ namespace GameLib.ColorScheme
                 CreateSchemeCreator(OutputDirectory, schemeCreatorName, textureSource.SourceTexture);
             }
 		}
+
 
 		void CreateSchemeCreator(string outputDirectory, string schemeCreatorName, Texture2D texture)
 		{
@@ -70,4 +72,5 @@ namespace GameLib.ColorScheme
 			UnityEditor.AssetDatabase.Refresh();
 		}
 	}
+#endif
 }

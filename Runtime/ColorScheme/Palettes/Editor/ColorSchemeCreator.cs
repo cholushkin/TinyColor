@@ -9,7 +9,7 @@ using Color = UnityEngine.Color;
 
 namespace GameLib.ColorScheme
 {
-
+#if UNITY_EDITOR
     [CreateAssetMenu(fileName = "ColorSchemeCreator", menuName = "GameLib/Color/ColorSchemeCreator", order = 1)]
     public class ColorSchemeCreator : ScriptableObject
     {
@@ -274,4 +274,5 @@ namespace GameLib.ColorScheme
             Debug.Log($"ColorScheme saved at: {path}");
         }
     }
+#endif
 }

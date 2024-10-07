@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace GameLib.ColorScheme
 {
+#if UNITY_EDITOR
     public static class MiniPixelFontDictionary
     {
         public static Dictionary<char, int[,]> Chars = new Dictionary<char, int[,]>
@@ -282,4 +283,5 @@ namespace GameLib.ColorScheme
             }}
         };
     }
+#endif
 }
