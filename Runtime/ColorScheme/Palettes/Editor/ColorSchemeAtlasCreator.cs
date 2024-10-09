@@ -128,6 +128,8 @@ namespace GameLib.ColorScheme
             File.WriteAllBytes(path, bytes);
             
             ColorScheme.Atlas = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+            EditorUtility.SetDirty(ColorScheme); // Mark the object as dirty to ensure changes are saved
+            AssetDatabase.SaveAssets(); // Save all pending changes to assets
             AssetDatabase.Refresh();
             Debug.Log("Texture generated at: " + path);
             Debug.Log($"Texture assigned to {ColorScheme.name}.Atlas");
