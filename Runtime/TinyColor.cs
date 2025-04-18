@@ -42,7 +42,7 @@ namespace TinyColorLib
                 A = a;
             }
 
-            public RGBA Normalize()
+            public new RGBA Normalize()
             {
                 return new RGBA(Mathf.Clamp01(R), Mathf.Clamp01(G), Mathf.Clamp01(B), Mathf.Clamp01(A));
             }
@@ -125,7 +125,7 @@ namespace TinyColorLib
                 A = a;
             }
 
-            public HSLA Normalize()
+            public new HSLA Normalize()
             {
                 return new HSLA(H, Mathf.Clamp01(S), Mathf.Clamp01(L), Mathf.Clamp01(A));
             }
@@ -169,7 +169,7 @@ namespace TinyColorLib
                 A = a;
             }
 
-            public HSVA Normalize()
+            public new HSVA Normalize()
             {
                 return new HSVA(H, Mathf.Clamp01(S), Mathf.Clamp01(V), Mathf.Clamp01(A));
             }
