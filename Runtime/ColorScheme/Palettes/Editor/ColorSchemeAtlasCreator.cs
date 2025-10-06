@@ -1,7 +1,8 @@
+using System;
 using System.Collections.Generic;
-using NaughtyAttributes;
 using System.IO;
 using System.Linq;
+using NaughtyAttributes;
 using TinyColorLib;
 using UnityEditor;
 using UnityEngine;
@@ -22,48 +23,75 @@ namespace GameLib.ColorScheme
             ColumnsWithText,
         }
 
-        public ColorScheme ColorScheme;
-        public Color Background;
-        
-        [Tooltip("Directory where to generate the output atlas texture (related to Assets directory of the project). If omitted the same directory as ColorScheme will be used")]
-        public string OutputDirectory;
-        public Vector2Int TextureAspects;
-        public Vector2Int CellSize;
-        public Vector2Int CellMargin;
-        public AtlasLayout Layout;
+        [Serializable]
+        public class AtlasGenerationParameters
+        {
+            public ColorScheme ColorScheme;
+            public bool AssignAtlasToColorScheme;
+            public Color Background;
+
+            [Tooltip("Directory where to generate the output atlas texture (relative to Assets). If empty, uses ColorScheme's folder.")]
+            public string OutputDirectory;
+
+            public Vector2Int TextureAspects;
+            public Vector2Int CellSize;
+            public Vector2Int CellMargin;
+            public AtlasLayout Layout;
+            public string TextureNameSuffix;
+        }
+
+        public AtlasGenerationParameters AtlasForUnity;
+        public AtlasGenerationParameters AtlasForBlender;
 
         [Button]
         public void GenerateAtlas()
         {
-            Assert.IsNotNull(ColorScheme);
-            Assert.IsTrue(TextureAspects.x > 0);
-            Assert.IsTrue(TextureAspects.y > 0);
-            Texture2D texture = new Texture2D(TextureAspects.x, TextureAspects.y);
+            AssertAtlasParameters(AtlasForUnity);
+            GenerateAtlasImpl(AtlasForUnity);
+        }
+
+        [Button]
+        public void GenerateAtlasBlender()
+        {
+            AssertAtlasParameters(AtlasForBlender);
+            GenerateAtlasImpl(AtlasForBlender);
+        }
+
+
+        private void AssertAtlasParameters(AtlasGenerationParameters parameters)
+        {
+            Assert.IsNotNull(parameters.ColorScheme, "ColorScheme cannot be null");
+            Assert.IsTrue(parameters.TextureAspects.x > 0 && parameters.TextureAspects.y > 0, "TextureAspects must be > 0");
+            Assert.IsTrue(parameters.CellSize.x > 0 && parameters.CellSize.y > 0, "CellSize must be > 0");
+        }
+
+        private void GenerateAtlasImpl(AtlasGenerationParameters parameters)
+        {
+            Texture2D texture = new Texture2D(parameters.TextureAspects.x, parameters.TextureAspects.y);
             texture.wrapMode = TextureWrapMode.Clamp;
             texture.filterMode = FilterMode.Point;
 
-            ClearTexture(texture, Background);
+            ClearTexture(texture, parameters.Background);
 
-            // Get the directory of the ColorScheme ScriptableObject
-            string colorSchemePath = AssetDatabase.GetAssetPath(ColorScheme);
+            string colorSchemePath = AssetDatabase.GetAssetPath(parameters.ColorScheme);
             string directory = Path.GetDirectoryName(colorSchemePath);
 
-            // Construct the path for the new texture next to the ColorScheme
-            string textureName = $"{ColorScheme.name}"; // You can modify this as needed
-            string path = Path.Combine(directory, $"{textureName}.png");
-            if (!string.IsNullOrEmpty(OutputDirectory))
-            {
-                path = $"Assets/{OutputDirectory}/{textureName}.png";
-            }
+            string textureName = parameters.ColorScheme.name;
+            if (!string.IsNullOrEmpty(parameters.TextureNameSuffix))
+                textureName += "_" + parameters.TextureNameSuffix;
 
-            if (texture.height % CellSize.y != 0f)
+            string path = Path.Combine(directory, textureName + ".png");
+            if (!string.IsNullOrEmpty(parameters.OutputDirectory))
+                path = $"Assets/{parameters.OutputDirectory}/{textureName}.png";
+
+            if (texture.height % parameters.CellSize.y != 0f)
                 Debug.LogWarning("Texture height is not a multiple of cell height");
 
-            int row = texture.height / CellSize.y - 1;
+            int row = texture.height / parameters.CellSize.y - 1;
 
-            if (Layout == AtlasLayout.OneItemPerRow || Layout == AtlasLayout.OneItemPerRowWithNames)
+            if (parameters.Layout == AtlasLayout.OneItemPerRow || parameters.Layout == AtlasLayout.OneItemPerRowWithNames)
             {
-                foreach (var item in ColorScheme.Data)
+                foreach (var item in parameters.ColorScheme.Data)
                 {
                     if (row < 0)
                     {
@@ -71,25 +99,21 @@ namespace GameLib.ColorScheme
                         continue;
                     }
 
-                    // Draw color cells
                     for (int i = 0; i < item.Palette.Length; ++i)
-                    {
-                        if (!DrawCell(texture, i, row, item.Palette[i], Background))
-                            Debug.LogWarning($"Drawing out of bounds xy={i},{row}");
-                    }
+                        DrawCell(texture, i, row, item.Palette[i], parameters.Background, parameters.CellSize, parameters.CellMargin);
 
-                    if (Layout == AtlasLayout.OneItemPerRowWithNames)
-                        RenderTextToTexture(texture, item.Palette.Length * CellSize.x, row * CellSize.y,
-                            " " + item.Name, null);
+                    if (parameters.Layout == AtlasLayout.OneItemPerRowWithNames)
+                        RenderTextToTexture(texture, item.Palette.Length * parameters.CellSize.x, row * parameters.CellSize.y, item.Name, null);
+
                     row--;
                 }
             }
-            else if (Layout == AtlasLayout.Columns || Layout == AtlasLayout.ColumnsWithText)
+            else
             {
-                var xOffset = 0;
-                var maxOnCurrentRow = 0;
-                var index = 0;
-                foreach (var item in ColorScheme.Data)
+                int xOffset = 0;
+                int maxOnCurrentRow = 0;
+
+                foreach (var item in parameters.ColorScheme.Data)
                 {
                     if (row < 0)
                     {
@@ -97,101 +121,84 @@ namespace GameLib.ColorScheme
                         continue;
                     }
 
-                    // Draw color cells
                     for (int i = 0; i < item.Palette.Length; ++i)
-                    {
-                        if (!DrawCell(texture, xOffset + i, row, item.Palette[i], Background))
-                            Debug.LogWarning($"Drawing out of bounds xy={i},{row}");
-                    }
-
-                    Debug.Log($"{index++}." + item.Name);
+                        DrawCell(texture, xOffset + i, row, item.Palette[i], parameters.Background, parameters.CellSize, parameters.CellMargin);
 
                     if (item.Palette.Length > maxOnCurrentRow)
                         maxOnCurrentRow = item.Palette.Length;
 
-                    if (Layout == AtlasLayout.ColumnsWithText)
-                        RenderTextToTexture(texture, xOffset * CellSize.x, row * CellSize.y, " " + item.Name, null);
+                    if (parameters.Layout == AtlasLayout.ColumnsWithText)
+                        RenderTextToTexture(texture, xOffset * parameters.CellSize.x, row * parameters.CellSize.y, item.Name, null);
 
                     row--;
                     if (row < 0)
                     {
-                        row = texture.height / CellSize.y - 1;
-                        xOffset += maxOnCurrentRow + 1; // +1  for 1 cell offset between rows
+                        row = parameters.TextureAspects.y / parameters.CellSize.y - 1;
+                        xOffset += maxOnCurrentRow + 1;
                         maxOnCurrentRow = 0;
                     }
                 }
             }
 
-
-            // Save the texture to the specified path
             byte[] bytes = texture.EncodeToPNG();
             File.WriteAllBytes(path, bytes);
-            
-            ColorScheme.Atlas = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
-            EditorUtility.SetDirty(ColorScheme); // Mark the object as dirty to ensure changes are saved
-            AssetDatabase.SaveAssets(); // Save all pending changes to assets
+
+            // Force Unity to import the new PNG
+            if (parameters.AssignAtlasToColorScheme)
+            {
+                AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
+
+                // Assign the loaded texture to the color scheme
+                parameters.ColorScheme.Atlas = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+                EditorUtility.SetDirty(parameters.ColorScheme);
+            }
+
+
+            AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            Debug.Log("Texture generated at: " + path);
-            Debug.Log($"Texture assigned to {ColorScheme.name}.Atlas");
-            
-            // Set the texture import settings
+            Debug.Log($"Texture generated at: {path}");
+            Debug.Log($"Texture assigned to {parameters.ColorScheme.name}.Atlas");
+
+
             SetTextureImportSettings(path);
         }
 
-        #region API
-        
         private void SetTextureImportSettings(string path)
         {
-            // Create a TextureImporter for the generated texture
             TextureImporter textureImporter = AssetImporter.GetAtPath(path) as TextureImporter;
-
             if (textureImporter != null)
             {
-                // Set the import settings
                 textureImporter.textureType = TextureImporterType.Sprite;
                 textureImporter.spriteImportMode = SpriteImportMode.Single;
-
-                // Apply changes
                 AssetDatabase.ImportAsset(path);
             }
         }
 
-        private bool DrawCell(Texture2D texture, int cellX, int cellY, Color color, Color bg)
+        private bool DrawCell(Texture2D texture, int cellX, int cellY, Color color, Color bg, Vector2Int cellSize, Vector2Int cellMargin)
         {
-            // Calculate the pixel coordinates of the top-left corner of the cell
-            int x = cellX * CellSize.x;
-            int y = cellY * CellSize.y;
+            int startX = cellX * cellSize.x;
+            int startY = cellY * cellSize.y;
 
-            return DrawColorRect(texture, x, y, color, bg, CellSize.x, CellSize.y, CellMargin.x, CellMargin.y);
-        }
-
-
-        // Returns false if the cell is out of texture bounds
-        private bool DrawColorRect(Texture2D texture, int x, int y, Color color, Color bg, int squareWidth, int squareHeight,
-            int marginX, int marginY)
-        {
-            for (int ix = x /*+ margin*/; ix < Mathf.Min(x + squareWidth /*- margin*/, texture.width); ix++)
-            for (int iy = y /*+ margin*/; iy < Mathf.Min(y + squareHeight/* - margin*/, texture.height); iy++)
+            for (int x = startX; x < Mathf.Min(startX + cellSize.x, texture.width); x++)
+            for (int y = startY; y < Mathf.Min(startY + cellSize.y, texture.height); y++)
             {
-                if (ix >= x + squareWidth - marginX || iy < y + marginY )
-                {
-                    texture.SetPixel(ix, iy, Background);
-                }
+                if (x >= startX + cellSize.x - cellMargin.x || y < startY + cellMargin.y)
+                    texture.SetPixel(x, y, bg);
                 else
-                    texture.SetPixel(ix, iy, color);
+                    texture.SetPixel(x, y, color);
             }
 
-            return !(x < 0 || y < 0 || x + squareWidth > texture.width || y + squareHeight > texture.height);
+            return !(startX < 0 || startY < 0 || startX + cellSize.x > texture.width || startY + cellSize.y > texture.height);
         }
-
 
         private void ClearTexture(Texture2D texture, Color clearColor)
         {
-            for (int x = 0; x < texture.width; x++)
-            for (int y = 0; y < texture.height; y++)
-                texture.SetPixel(x, y, clearColor);
-        }
+            Color[] clearPixels = new Color[texture.width * texture.height];
+            for (int i = 0; i < clearPixels.Length; i++)
+                clearPixels[i] = clearColor;
 
+            texture.SetPixels(clearPixels);
+        }
 
         Texture2D RenderTextToTexture(Texture2D texture, int x, int y, string text, Color? textColor)
         {
@@ -202,7 +209,6 @@ namespace GameLib.ColorScheme
             int caret = 0;
             int spacing = 1; // Additional space between characters
 
-
             for (int i = 0; i < text.Length; i++)
             {
                 int[,] pixels;
@@ -211,20 +217,17 @@ namespace GameLib.ColorScheme
                     var curCharColor = textColor;
                     if (!textColor.HasValue) // autocolor
                     {
-                        // Get all bg colors using LINQ
                         var bgColors = Enumerable.Range(0, pixels.GetLength(0))
                             .SelectMany(cy => Enumerable.Range(0, pixels.GetLength(1))
                                 .Select(cx => texture.GetPixel(caret + x + cx, y + charHeight - cy)))
                             .ToList();
 
-                        // Find the dominant color
                         Color dominantColor = bgColors
                             .GroupBy(color => color)
                             .OrderByDescending(group => group.Count())
                             .First()
                             .Key;
 
-                        // find good readability color for dominant color
                         curCharColor = ReadabilityHelpers.MostReadable(new TinyColor(dominantColor), textColors).ToColor();
                     }
 
@@ -245,7 +248,7 @@ namespace GameLib.ColorScheme
                     for (int extraY = 0; extraY < charHeight; ++extraY)
                     {
                         var bgColor = texture.GetPixel(caret + charWidth + x, y + charHeight - extraY);
-                        texture.SetPixel(caret + charWidth + x, y + charHeight - extraY, bgColor);
+                        texture.SetPixel(caret + x + charWidth, y + charHeight - extraY, bgColor);
                     }
 
                     caret += charWidth + spacing;
@@ -254,8 +257,6 @@ namespace GameLib.ColorScheme
 
             return texture;
         }
-
-        #endregion
     }
 #endif
 }
