@@ -10,6 +10,7 @@ namespace GameLib.ColorScheme
     {
         public enum MaterialCategory
         {
+            BasicColorsMaterials,
             OrganicMaterials,
             FruitsAndVegetables,
             GeneralVegetation,
