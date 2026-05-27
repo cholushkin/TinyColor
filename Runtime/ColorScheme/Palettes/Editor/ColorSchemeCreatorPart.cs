@@ -1,5 +1,5 @@
 using System.Linq;
-using NaughtyAttributes;
+using Alchemy.Inspector;
 using TinyColorLib;
 using UnityEngine.Assertions;
 

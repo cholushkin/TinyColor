@@ -1,7 +1,7 @@
 using System;
-using NaughtyAttributes;
 using System.Collections.Generic;
 using System.Linq;
+using Alchemy.Inspector;
 using TinyColorLib;
 using UnityEngine;
 using UnityEngine.Assertions;

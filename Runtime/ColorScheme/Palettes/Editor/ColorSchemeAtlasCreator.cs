@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using NaughtyAttributes;
+using Alchemy.Inspector;
 using TinyColorLib;
 using UnityEditor;
 using UnityEngine;

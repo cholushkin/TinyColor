@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using NaughtyAttributes;
+using Alchemy.Inspector;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -23,7 +23,7 @@ namespace GameLib.ColorScheme
 		}
 
 
-		[Button()]
+		[Button]
 		public void CreateColorSchemeCreators()
 		{
 			foreach (var textureSource in Sources)
