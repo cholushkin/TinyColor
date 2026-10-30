@@ -1,5 +1,7 @@
 # ColorSchemes Library
 
+> **Dependency note:** the Editor-only tooling in this folder (`ColorSchemeCreator`, `ColorSchemeAtlasCreator`, `TextureToColorSchemeCreator`) uses the third-party `Alchemy.Inspector` package for its custom inspectors. This is not declared in `package.json` (it is not distributed via the Unity Registry) — install [Alchemy](https://github.com/AnnulusGames/Alchemy) manually if you need these palette/atlas creation tools. The core `TinyColor`/`ColorScheme` runtime classes do not require it.
+
 ColorSchemes library provides a set of classes for managing color schemes in your projects. The library includes the following classes:
 
 1. **ColorSchemeCreator** (Editor-only ScriptableObject)

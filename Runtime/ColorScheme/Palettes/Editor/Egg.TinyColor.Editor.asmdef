@@ -1,0 +1,18 @@
+{
+    "name": "Egg.TinyColor.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:005573e0a37abf141aafbd693a19e117"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
