@@ -2,7 +2,8 @@
     "name": "Egg.TinyColor.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:005573e0a37abf141aafbd693a19e117"
+        "GUID:005573e0a37abf141aafbd693a19e117",
+        "GUID:88be65f96b86746888c927a5c8ff3534"
     ],
     "includePlatforms": [
         "Editor"
